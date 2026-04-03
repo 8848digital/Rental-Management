@@ -178,7 +178,8 @@ scheduler_events = {
 	# 	"rental_management.tasks.all"
 	# ],
 	"daily": [
-		"rental_management.tasks.daily.daily"
+		"rental_management.tasks.daily.daily",
+        "rental_management.rental_management.scripts.certificate_notification.certificate_expiry_notification"
 	],
 	# "hourly": [
 	# 	"rental_management.tasks.hourly"
