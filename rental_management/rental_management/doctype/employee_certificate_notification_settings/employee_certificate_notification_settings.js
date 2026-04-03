@@ -8,25 +8,25 @@
 // });
 
 frappe.ui.form.on("Employee Certificate Notification Settings", {
-    refresh(frm) {
+    setup: function (frm) {
 
-        // Filter Role
-        frm.fields_dict.employee_certificate_notification_detail.grid.get_field("role").get_query = function () {
+        // Filter Role (only enabled roles)
+        frm.set_query("role", "employee_certificate_notification_detail", function () {
             return {
                 filters: {
                     disabled: 0
                 }
             };
-        };
+        });
 
-        // Filter Sender
-        frm.fields_dict.employee_certificate_notification_detail.grid.get_field("sender").get_query = function () {
+        // Filter Sender (only email accounts with outgoing enabled)
+        frm.set_query("sender", "employee_certificate_notification_detail", function () {
             return {
                 filters: {
                     enable_outgoing: 1
                 }
             };
-        };
+        });
 
     }
 });
