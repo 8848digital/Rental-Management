@@ -1,0 +1,179 @@
+{% if doc.title=="Leave Policy Violation" %}
+<style>
+
+    /* Specifically target the letterhead wrapper if space persists */
+    .print-format table, .print-format tr, 
+    .print-format td, .print-format div, .print-format p {
+        font-family: Helvetica;
+        font-weight: 500;
+        vertical-align: middle;
+        line-height: 100%;
+        font-size: 16px !important;
+    }
+
+    .print-format th {
+        font-size: 10px !important;
+    }
+
+    @media screen {
+        .print-format {
+            width: 8.0in;
+            padding: 0.30in;
+            min-height: 11.7in;
+        }
+         body, html {
+    margin: 0;
+    padding: 0;
+  }
+    }
+
+    .header-img img{
+        width:100%;
+    }
+
+    .footer-img img{
+        width:100%;
+    }
+    body {
+    margin:0 !important;
+    padding:0 !important;
+}
+</style>
+
+
+{% set company = frappe.get_doc("Company", doc.company) %}
+{% set employee = frappe.get_doc("Employee", doc.employee) %}
+{% set letter_head = frappe.get_doc("Letter Head", company.default_letter_head) %}
+
+
+
+<!-- HEADER SECTION -->
+
+<div id="header-html">
+
+    {% if letter_head.image %}
+    <div class="header-img">
+        <img src="{{ letter_head.image }}">
+    </div>
+    {% endif %}
+
+</div>
+
+
+
+<!-- MAIN CONTENT -->
+
+<div class="print-format">
+<br><br>
+<div style="justify-content:space-between; 
+font-family:'Times New Roman', Times, serif; font-weight:bold;">
+
+<div>
+<b>{{ frappe.utils.formatdate(frappe.utils.nowdate(), "dd/MM/yyyy") }}</b>
+</div>
+
+<div>
+<b>Ref: {{ doc.name }}</b>
+</div>
+
+</div>
+<br><br>
+
+
+<p>
+<b>To,<br>
+
+{{ employee.employee_name }},<br>
+
+Employee ID No. {{ employee.name }}</b>
+</p>
+
+<br>
+
+<p>
+<strong>Subject: Warning Letter for Leave policy violation.</strong>
+</p>
+<br>
+
+<p>
+Dear {% if employee.salutation %}{{ employee.salutation }}. {% endif %}{{ employee.employee_name }}
+</p>
+<br>
+
+<p>
+This letter serves as a formal warning regarding your unauthorized extension of {{doc.leave_type}}.
+</p>
+<br>
+<p>
+As per our records, you proceeded on emergency leave on {{frappe.utils.formatdate(doc.leave_start_date, "dd/MM/yyyy")}} and the leave was approved for {{ doc.approved_leave_days }} days. You reported back to duty only on {{frappe.utils.formatdate(doc.actual_return_date, "dd/MM/yyyy")}} without prior approval or proper communication regarding the extension of your leave.
+</p>
+<br>
+<p>
+Such absence without approval and failure to maintain communication is considered a serious violation of company policies and disrupts operational requirements.
+</p>
+<br>
+<p>
+You are hereby advised to strictly adhere to company rules and ensure that any leave extension is properly communicated and approved in advance. Any repetition of such misconduct may result in further disciplinary action, which could include suspension or termination of employment.
+</p>
+
+
+
+<br>
+
+<p>
+For <b>{{ company.company_name }}</b>
+</p>
+
+<br><br>
+
+<p>
+<strong>{% if doc.hr_salutation %}
+{{ doc.hr_salutation }}. {{ frappe.db.get_value("User", doc.hr_manager, "full_name") }}
+{% else %}
+{{ frappe.db.get_value("User", doc.hr_manager, "full_name") }}
+{% endif %}<br>
+HR Manager</strong>
+</p>
+
+
+
+<br><br><br>
+
+<div style="margin-top:40px; width:300px; margin-left:auto; font-family:'Times New Roman', Times, serif;">
+
+<p><b><u>Acknowledged &amp; accepted:</u></b></p>
+
+<p><strong>Name:</strong> {{ employee.employee_name }}</p>
+
+<p><strong>Date: </strong>{{ frappe.utils.formatdate(frappe.utils.nowdate(), "dd/MM/yyyy") }}</p>
+
+<p><strong>Sign:</strong></p>
+
+</div>
+
+</div>
+
+
+
+<!-- FOOTER SECTION -->
+
+<div id="footer-html">
+
+    {% if letter_head.footer_image %}
+    <div class="footer-img">
+        <img src="{{ letter_head.footer_image }}">
+    </div>
+    {% endif %}
+
+</div>
+{% else %}
+<div style="text-align:center; padding:40px; font-family:Helvetica;">
+    <h3 style="color:#d9534f;">Incorrect Print Format Selected</h3>
+    <p>
+        This print format is designed only for the <strong>Leave Policy Violation</strong>.
+    </p>
+    <p>
+        Please select the correct print format to generate the document properly.
+    </p>
+</div>
+{% endif %}
