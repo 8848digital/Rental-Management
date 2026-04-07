@@ -1780,6 +1780,15 @@
    "value": "1"
   },
   {
+ "doctype": "Property Setter",
+ "doc_type": "Employee",
+ "doctype_or_field": "DocField",
+ "field_name": "employee",
+ "property": "hidden",
+ "property_type": "Check",
+ "value": "0"
+},
+  {
    "_assign": null,
    "_comments": null,
    "_liked_by": null,

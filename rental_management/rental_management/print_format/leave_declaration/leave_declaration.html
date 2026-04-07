@@ -1,0 +1,131 @@
+<style>
+
+    /* Specifically target the letterhead wrapper if space persists */
+    .print-format table, .print-format tr, 
+    .print-format td, .print-format div, .print-format p {
+        font-family: Helvetica;
+        font-weight: 500;
+        vertical-align: middle;
+        line-height: 100%;
+        font-size: 16px !important;
+    }
+
+    .print-format th {
+        font-size: 10px !important;
+    }
+
+    @media screen {
+        .print-format {
+            width: 8.0in;
+            padding: 0.30in;
+            min-height: 11.7in;
+        }
+         body, html {
+    margin: 0;
+    padding: 0;
+  }
+    }
+
+    .header-img img{
+        width:100%;
+    }
+
+    .footer-img img{
+        width:100%;
+    }
+    body {
+    margin:0 !important;
+    padding:0 !important;
+}
+</style>
+
+
+{% set company = frappe.get_doc("Company", doc.company) %}
+{% set employee = frappe.get_doc("Employee", doc.employee) %}
+{% set letter_head = frappe.get_doc("Letter Head", company.default_letter_head) %}
+
+
+
+<!-- HEADER SECTION -->
+
+<div id="header-html">
+
+    {% if letter_head.image %}
+    <div class="header-img">
+        <img src="{{ letter_head.image }}">
+    </div>
+    {% endif %}
+
+</div>
+
+
+
+<!-- MAIN CONTENT -->
+
+<div class="print-format">
+<br><br>
+<div style="justify-content:space-between; 
+font-family:'Times New Roman', Times, serif; font-weight:bold;">
+
+<div style="font-size: 20px !important;">
+<b><u><center>LEAVE DECLARATION</center></b></u></b>
+</div>
+<br><br>
+<p>
+    I,{{doc.employee_name}} holder of {{doc.data}} passport number {{doc.passport_number}} and working as {{doc.designation}} at Orion group will go on {{ doc.leaving_date}} leave for {{doc.leave_days}} days from {{doc.leave_start_date}} and return on {{doc.leave_end_date}}.
+</p>
+
+
+<br><br>
+
+
+<p>
+I fully understand and agreed on the following conditions: <strong>(a) Employee should return within
+the approved leave days (b) Leave extension requires approval a week prior to return date
+(c) Employee returning from leave must inform HR and Operations department a week
+prior to the departure date. (d)Employee will be subjected for disciplinary action or
+termination of contract if employee will not return within the approved leave days. {{doc.company}}</strong> has the right to deduct AED 500 for each month of delay, or proportionately for the
+number of days I delay returning from my vacation, and may terminate my contract if the
+conditions are breached
+</p>
+<br>
+<p>
+I solemnly declare that after leaving {{doc.company}} I will abide by all the conditions of the
+said agreement. Failure to comply on above declarations, {{doc.company}} reserves the right to
+take legal action as per UAE law.
+</p>
+<br><br>
+<p>
+Affixing my signature below as confirmation of above-mentioned arrangement.
+</p>
+<br>
+
+
+
+
+<div style="margin-top:40px; font-family:'Times New Roman', Times, serif;">
+
+
+<p><strong>Name:</strong> {{ doc.employee_name }}</p>
+<br>
+<p><strong>Employee Id: </strong>{{ doc.employee }}</p>
+<br>
+<p><strong>Signature and Thumb Impression:</strong></p>
+
+</div>
+
+</div>
+
+
+
+<!-- FOOTER SECTION -->
+
+<div id="footer-html">
+
+    {% if letter_head.footer_image %}
+    <div class="footer-img">
+        <img src="{{ letter_head.footer_image }}">
+    </div>
+    {% endif %}
+
+</div>
