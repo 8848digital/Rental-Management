@@ -1,0 +1,418 @@
+<style>
+
+.print-format table, .print-format tr,
+.print-format td, .print-format div, .print-format p {
+    font-weight: 500;
+    font-size: 14px !important;
+}
+
+.print-format th{
+    font-size:10px !important;
+    font-weight:bold !important;
+}
+
+.header-img img{
+    width:100%;
+}
+
+.footer-img img{
+    width:100%;
+}
+
+.section-title{
+    font-weight:bold;
+    margin-top:15px;
+}
+
+.green-head{
+    background:#d9e4d3;
+}
+
+.total-row{
+    background:#d9d9d9;
+    font-weight:bold;
+}
+
+.settlement-box{
+    background:#ead3c2;
+    border:2px solid black;
+    padding:10px;
+    text-align:center;
+}
+
+.approval-bar{
+    background:#a8c3e5;
+    padding:6px;
+    font-weight:bold;
+}
+
+</style>
+
+
+{% set company = frappe.get_doc("Company", doc.company) %}
+{% set employee = frappe.get_doc("Employee", doc.employee) %}
+{% set letter_head = frappe.get_doc("Letter Head", company.default_letter_head) %}
+{% set currency = company.default_currency %}
+
+{% set currency_names = {
+"AED": "UAE Dirhams",
+"PKR": "Pakistani Rupees",
+"USD": "US Dollars",
+"INR": "Indian Rupees",
+"SAR": "Saudi Riyals"
+} %}
+
+{% set amount_in_words = frappe.utils.money_in_words(doc.total_settlement_payable).replace(" only.", "") %}
+
+
+<!-- HEADER -->
+
+<div id="header-html">
+{% if letter_head.image %}
+<div class="header-img">
+<img src="{{ letter_head.image }}">
+</div>
+{% endif %}
+</div>
+
+
+
+
+
+
+<!-- Employee Details (NO BORDER) -->
+
+<table style="width:100%; margin-bottom:20px;">
+
+<tr>
+<td><b>Employee Details</b></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+
+<tr>
+<td>Type of Settlement :</td>
+<td>{{ doc.type_of_settlement }}</td>
+
+<td>Date of Settlement :</td>
+<td>{{ doc.date_of_settlement }}</td>
+</tr>
+
+<tr>
+<td>Employee Name :</td>
+<td>{{ doc.employee_name }}</td>
+
+<td>Monthly Salary :</td>
+<td>{{ currency }} {{ doc.monthly_salary }}</td>
+</tr>
+
+<tr>
+<td>Employee No. :</td>
+<td>{{ doc.employee }}</td>
+
+<td>DOJ / Re-Joining Date :</td>
+<td>{{ doc.doj__re_joining_date }}</td>
+</tr>
+
+<tr>
+<td>Position :</td>
+<td>{{ doc.position }}</td>
+
+<td>Total Service :</td>
+<td>{{ doc.total_service }}</td>
+</tr>
+
+<tr>
+<td>Department :</td>
+<td>{{ doc.department }}</td>
+
+<td>Last Working Day :</td>
+<td>{{ doc.last_working_day }}</td>
+</tr>
+
+</table>
+
+
+
+<div class="section-title">Entitlements</div>
+
+
+
+<!-- Salary Due -->
+{% if doc.type_of_settlement!="Internal Transfer Settlement" %}
+<div class="section-title">Salary Due</div>
+
+<table style="width:100%; border-collapse:collapse;" border="1">
+
+<tr class="green-head">
+<th>From</th>
+<th>To</th>
+<th>Days</th>
+<th>Amount</th>
+</tr>
+
+{% for row in doc.salary_due %}
+<tr>
+<td>{{ row.from }}</td>
+<td>{{ row.to }}</td>
+<td>{{ row.days }}</td>
+<td>{{ currency }} {{ row.amount }}</td>
+</tr>
+{% endfor %}
+
+<tr class="total-row">
+<td colspan="3" align="center">Total Monthly Salary Payable</td>
+<td>{{ currency }} {{ doc.total_salary_due or "0.00" }}</td>
+</tr>
+
+</table>
+
+{% endif %}
+
+<!-- Leave Pay -->
+
+<div class="section-title">Leave Pay</div>
+
+<table style="width:100%; border-collapse:collapse;" border="1">
+
+<tr class="green-head">
+<th>From</th>
+<th>To</th>
+<th>Tenure</th>
+<th>Amount</th>
+</tr>
+
+{% for row in doc.leave_pay %}
+<tr>
+<td>{{ row.from }}</td>
+<td>{{ row.to }}</td>
+<td>{{ row.tenure }}</td>
+<td>{{ currency }} {{ row.amount }}</td>
+</tr>
+{% endfor %}
+
+<tr class="total-row">
+<td colspan="3" align="center">Total Leave Salary Payable</td>
+<td>{{ currency }} {{ doc.total_leave_pay or "0.00" }}</td>
+</tr>
+
+</table>
+{% if doc.type_of_settlement=="Final Settlement" %}
+<div class="section-title">Gratuity Pay Pay</div>
+
+<table style="width:100%; border-collapse:collapse;" border="1">
+
+<tr class="green-head">
+<th>From</th>
+<th>To</th>
+<th>Tenure</th>
+<th>Amount</th>
+</tr>
+
+{% for row in doc.gratuity_pay %}
+<tr>
+<td>{{ row.from }}</td>
+<td>{{ row.to }}</td>
+<td>{{ row.tenure }}</td>
+<td>{{ currency }} {{ row.amount }}</td>
+</tr>
+{% endfor %}
+
+<tr class="total-row">
+<td colspan="3" align="center">Total Gratuity Salary Payable</td>
+<td>{{ currency }} {{ doc.total_leave_pay or "0.00" }}</td>
+</tr>
+
+</table>
+{% endif %}
+<!-- Ticket Allowance -->
+{% if doc.type_of_settlement!="Labour Court Settlement" %}
+<div class="section-title">Ticket Allowance</div>
+
+<table style="width:100%; border-collapse:collapse;" border="1">
+
+<tr class="green-head">
+<th>From</th>
+<th>To</th>
+<th>Days</th>
+<th>Amount</th>
+</tr>
+
+{% for row in doc.ticket_allowance %}
+<tr>
+<td>{{ row.from }}</td>
+<td>{{ row.to }}</td>
+<td>{{ row.days }}</td>
+<td>{{ currency }} {{ row.amount }}</td>
+</tr>
+{% endfor %}
+
+</table>
+{% endif %}
+
+
+<!-- Allowances -->
+
+<table style="width:100%; margin-top:10px;" border="1">
+
+<tr>
+<td>Overtime Allowance :</td>
+<td>{{ currency }} {{ doc.overtime_allowance or "0.00" }}</td>
+
+<td>Other Allowance :</td>
+<td>{{ currency }} {{ doc.other_allowance or "0.00" }}</td>
+</tr>
+
+</table>
+
+
+
+<!-- Total Entitlements -->
+
+<table style="width:100%; margin-top:10px;" border="1">
+
+<tr class="total-row">
+<td align="center">
+Total Entitlements : {{ currency }} {{ doc.total_entitlements or "0.00" }}
+</td>
+</tr>
+
+</table>
+
+
+
+<div class="section-title">Deductions :</div>
+
+
+
+<table style="width:100%;" border="1">
+
+<tr>
+<td>Outstanding Advance :</td>
+<td>{{ currency }} {{ doc.outstanding_advance or "0.00" }}</td>
+</tr>
+
+<tr>
+<td>Traffic fine :</td>
+<td>{{ currency }} {{ doc.traffic_fine or "0.00" }}</td>
+</tr>
+
+<tr>
+<td>Adjustments, if any :</td>
+<td>{{ currency }} {{ doc.adjustments or "0.00" }}</td>
+</tr>
+
+<tr>
+<td>Other deduction :</td>
+<td>{{ currency }} {{ doc.other_deduction or "0.00" }}</td>
+</tr>
+
+<tr class="total-row">
+<td align="center" colspan="2" style="color:red;">
+Total Deductions : {{ currency }} {{ doc.total_deductions or "0.00" }}
+</td>
+</tr>
+
+</table>
+
+
+
+<!-- Settlement Payable -->
+
+<div class="settlement-box">
+
+<div style="font-size:18px;">
+{{ currency }} {{ doc.total_settlement_payable }}
+</div>
+
+<div>
+<b>Total Settlement Payable:</b>
+</div>
+
+<div>
+({{ amount_in_words }} {{ currency_names.get(currency) }} Only)
+</div>
+
+</div>
+
+
+
+<!-- Approvals -->
+<div class="approval-bar" style="margin-top:20px;">Approvals :</div>
+
+<table style="width:100%; border-collapse:collapse; margin-top:10px;">
+
+<tr>
+<td colspan="3" style="padding-bottom:10px;">Remarks :</td>
+</tr>
+
+<tr>
+<td colspan="3" style="height:40px; padding-bottom:20px;"></td>
+</tr>
+
+<tr>
+
+<td align="center" style="padding-bottom:25px;">
+Prepared By:<br>
+<b>HR Department</b><br><br><br><br>
+
+<div style="border-bottom:1px solid #000; width:60%; margin:auto;"></div>
+
+</td>
+
+<td align="center" style="padding-bottom:25px;">
+Verified By:<br>
+<b>Administration Manager</b><br><br><br><br>
+
+<div style="border-bottom:1px solid #000; width:60%; margin:auto;"></div>
+
+</td>
+
+<td align="center" style="padding-bottom:25px;">
+Approved By:<br>
+<b>General Manager</b><br><br><br><br>
+
+<div style="border-bottom:1px solid #000; width:60%; margin:auto;"></div>
+
+</td>
+
+</tr>
+
+</table>
+
+
+
+<div class="section-title">Employee's Acknowledgment :</div>
+
+<p>
+I {{doc.employee_name}}, hereby acknowledge that I have received the above settlement of my eligible entitlements during the service with the company and I confirm that nothing is due/pending from the company.
+</p>
+
+<table style="margin-left:auto; width:40%;">
+
+<tr>
+<td>Signature :</td>
+<td></td>
+</tr>
+
+<tr>
+<td>Date :</td>
+<td>{{ frappe.utils.formatdate(frappe.utils.nowdate(), "dd/MM/yyyy") }}</td>
+</tr>
+
+</table>
+
+
+
+<!-- FOOTER -->
+
+<div id="footer-html">
+
+{% if letter_head.footer_image %}
+<div class="footer-img">
+<img src="{{ letter_head.footer_image }}">
+</div>
+{% endif %}
+
+</div>

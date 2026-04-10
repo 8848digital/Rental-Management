@@ -1,0 +1,163 @@
+<style>
+   .header-img img{
+        width:100%;
+    }
+
+    .footer-img img{
+        width:100%;
+    }
+    body {
+    margin:0 !important;
+    padding:0 !important;
+}
+.print-format table, .print-format tr, 
+    .print-format td, .print-format div, .print-format p {
+        font-family: Helvetica;
+        font-weight: 500;
+        font-size: 12px !important;
+    }
+
+    .print-format th {
+        font-size: 12px !important;
+    }
+</style>
+
+{% set company = frappe.get_doc("Company", doc.company) %}
+{% set employee = frappe.get_doc("Employee", doc.employee) %}
+{% set letter_head = frappe.get_doc("Letter Head", company.default_letter_head) %}
+
+
+
+<!-- HEADER SECTION -->
+
+<div id="header-html">
+
+    {% if letter_head.image %}
+    <div class="header-img">
+        <img src="{{ letter_head.image }}">
+    </div>
+    {% endif %}
+
+</div>
+<div style="width:100%; font-size:14px;">
+
+<table style="width:100%; margin-bottom:20px;">
+    {% set salutation = frappe.db.get_value("Employee", doc.employee, "salutation") %}
+
+    <tr>
+        <td style="width:10%; font-weight:bold;">TO</td>
+        <td>: {{ salutation or "Mr." }} {{ doc.employee_name }} ({{ doc.employee }})</td>
+    </tr>
+
+    <tr>
+        <td style="font-weight:bold;">FROM</td>
+        <td>: HR Department</td>
+    </tr>
+
+    <tr>
+        <td style="font-weight:bold;">DATE</td>
+        <td>: {{ doc.effective_date }}</td>
+    </tr>
+
+    <tr>
+        <td style="font-weight:bold;">REFERENCE</td>
+        <td>: {{ doc.name }}</td>
+    </tr>
+</table>
+
+<hr style="border:1px solid black; margin-bottom:20px;">
+{% set salutation = frappe.db.get_value("Employee", doc.employee, "salutation") %}
+<p>Dear {{salutation or "Mr."}}. {{ doc.employee_name }},</p>
+
+{% set currency_names = {
+    "AED": "UAE Dirhams",
+    "PKR": "Pakistani Rupees",
+    "USD": "US Dollars",
+    "INR": "Indian Rupees",
+    "SAR": "Saudi Riyals"
+} %}
+
+{% set amount_in_words = frappe.utils.money_in_words(doc.salary_increment_amt).replace(" only.", "") %}
+
+
+<p>
+With immense pleasure we would like to inform that based on the performance review report you are entitled for
+a monthly salary increment of <b>{{ doc.currency }} {{ doc.salary_increment_amt }}/-
+({{ amount_in_words }} {{ currency_names.get(doc.currency) }} Only)</b> which will be effective from
+<b>{{ doc.effective_date }}</b>.
+</p>
+
+
+<p>
+Your revised salary break up will be as given below:
+</p>
+
+<table style="width:100%; border-collapse: collapse; margin-top:15px;">
+    <thead>
+        <tr>
+            <th style="border:1px solid black; padding:8px; text-align:left;background-color: rgba(235, 221, 221, 0.797);">Particulars</th>
+            <th style="border:1px solid black; padding:8px; text-align:right;background-color: rgba(235, 221, 221, 0.797);">Existing</th>
+            <th style="border:1px solid black; padding:8px; text-align:right;background-color: rgba(235, 221, 221, 0.797);">Revised</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for row in doc.details %}
+        <tr>
+            <td style="border:1px solid black; padding:8px;">{{ row.particulars }}</td>
+            <td style="border:1px solid black; padding:8px; text-align:right;">
+                {{ doc.currency }} {{ row.existing }}
+            </td>
+            <td style="border:1px solid black; padding:8px; text-align:right;">
+                {{ doc.currency }} {{ row.revised }}
+            </td>
+        </tr>
+        {% endfor %}
+
+        <tr>
+            <td style="border:1px solid black; padding:8px; font-weight:bold;">
+                Total Monthly Salary
+            </td>
+
+            <td style="border:1px solid black; padding:8px; text-align:right; font-weight:bold;">
+                {{ doc.currency }} {{ doc.total_existing_monthly_salary }}
+            </td>
+
+            <td style="border:1px solid black; padding:8px; text-align:right; font-weight:bold;">
+                {{ doc.currency }} {{ doc.total_revised_monthly_salary }}
+            </td>
+        </tr>
+
+    </tbody>
+</table>
+
+<br>
+<p>
+
+All other employment terms and benefits remain unchanged till any change occurs through official notification.
+</p>
+
+<p>
+We also want to take this opportunity to thank you for all your contribution over the past years. Your
+performance has been exemplary and we look forward for your continued valuable service with {{doc.company}}.
+</p>
+
+<br>
+
+<p>
+Best Regards,<br><br>
+<b>HR Department</b><br>
+Orion Group
+</p>
+
+</div>
+<div id="footer-html">
+
+    {% if letter_head.footer_image %}
+    <div class="footer-img">
+        <img src="{{ letter_head.footer_image }}">
+    </div>
+    {% endif %}
+
+</div>
