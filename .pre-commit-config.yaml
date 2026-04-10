@@ -1,0 +1,6 @@
+repos:
+  - repo: https://github.com/returntocorp/semgrep
+    rev: v1.158.0
+    hooks:
+      - id: semgrep
+        args: ["--config", "auto"]

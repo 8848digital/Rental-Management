@@ -30,9 +30,10 @@ class WarningLetter(Document):
 		incident_details: DF.Text | None
 		leave_start_date: DF.Date | None
 		leave_type: DF.Link | None
+		mode_of_payment: DF.Literal["", "Cash", "WPS"]
 		posting_date: DF.Date | None
 		termination_date: DF.Date | None
-		title: DF.Literal["", "Negligence of Work", "Warning for Physical Misconduct", "Safety Violation", "Leave Policy Violation", "Alcohol Consumption", "Not Following Company Policy", "Not Following Supervisor Instructions", "Misconduct Warning Letter", "Attendance Improvement Letter", "Diesel Theft", "Refusal to Work", "Poor Performanc", "Termination of Employment", "Non Compliance with Company Policy", "Poor Performance"]
+		title: DF.Literal["", "Negligence of Work", "Warning for Physical Misconduct", "Safety Violation", "Leave Policy Violation", "Alcohol Consumption", "Not Following Company Policy", "Not Following Supervisor Instructions", "Misconduct Warning Letter", "Attendance Improvement Letter", "Diesel Theft", "Refusal to Work", "Poor Performance", "Termination of Employment", "Non Compliance with Company Policy", "Poor Performance", "UNDERTAKING LETTER"]
 		warning_template: DF.Link | None
 	# end: auto-generated types
 	pass
