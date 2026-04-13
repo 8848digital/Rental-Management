@@ -3,6 +3,8 @@
 .print-format table, .print-format tr,
 .print-format td, .print-format div, .print-format p {
     font-weight: 500;
+    vertical-align: middle;
+    line-height: 100%;
     font-size: 14px !important;
 }
 
@@ -17,6 +19,10 @@
 
 .footer-img img{
     width:100%;
+}
+    body {
+    margin:0 !important;
+    padding:0 !important;
 }
 
 .section-title{
@@ -85,49 +91,49 @@
 <table style="width:100%; margin-bottom:20px;">
 
 <tr>
-<td><b>Employee Details</b></td>
+<td><b><u>Employee Details</u></b></td>
 <td></td>
 <td></td>
 <td></td>
 </tr>
 
 <tr>
-<td>Type of Settlement :</td>
+<td><strong>Type of Settlement :</strong></td>
 <td>{{ doc.type_of_settlement }}</td>
 
-<td>Date of Settlement :</td>
+<td><strong>Date of Settlement :</strong></td>
 <td>{{ doc.date_of_settlement }}</td>
 </tr>
 
 <tr>
-<td>Employee Name :</td>
+<td><strong>Employee Name :</strong></td>
 <td>{{ doc.employee_name }}</td>
 
-<td>Monthly Salary :</td>
+<td><strong> Salary :</strong></td>
 <td>{{ currency }} {{ doc.monthly_salary }}</td>
 </tr>
 
 <tr>
-<td>Employee No. :</td>
+<td><strong>Employee No. :</strong></td>
 <td>{{ doc.employee }}</td>
 
-<td>DOJ / Re-Joining Date :</td>
+<td><strong>DOJ / Re-Joining Date :</strong></td>
 <td>{{ doc.doj__re_joining_date }}</td>
 </tr>
 
 <tr>
-<td>Position :</td>
+<td><strong>Position :</strong></td>
 <td>{{ doc.position }}</td>
 
-<td>Total Service :</td>
+<td><strong>Total Service :</strong></td>
 <td>{{ doc.total_service }}</td>
 </tr>
 
 <tr>
-<td>Department :</td>
+<td><strong>Department :</strong></td>
 <td>{{ doc.department }}</td>
 
-<td>Last Working Day :</td>
+<td><strong>Last Working Day :</strong></td>
 <td>{{ doc.last_working_day }}</td>
 </tr>
 
@@ -135,13 +141,13 @@
 
 
 
-<div class="section-title">Entitlements</div>
+<div class="section-title"><strong><u>Entitlements</u></strong></div>
 
 
 
 <!-- Salary Due -->
 {% if doc.type_of_settlement!="Internal Transfer Settlement" %}
-<div class="section-title">Salary Due</div>
+<div class="section-title"><strong>Salary Due</strong></div><br>
 
 <table style="width:100%; border-collapse:collapse;" border="1">
 
@@ -172,7 +178,7 @@
 
 <!-- Leave Pay -->
 
-<div class="section-title">Leave Pay</div>
+<div class="section-title"><strong>Leave Pay</strong></div><br>
 
 <table style="width:100%; border-collapse:collapse;" border="1">
 
@@ -199,7 +205,7 @@
 
 </table>
 {% if doc.type_of_settlement=="Final Settlement" %}
-<div class="section-title">Gratuity Pay Pay</div>
+<div class="section-title"><strong>Gratuity Pay</strong></div><br>
 
 <table style="width:100%; border-collapse:collapse;" border="1">
 
@@ -228,7 +234,7 @@
 {% endif %}
 <!-- Ticket Allowance -->
 {% if doc.type_of_settlement!="Labour Court Settlement" %}
-<div class="section-title">Ticket Allowance</div>
+<div class="section-title"><strong>Ticket Allowance</strong></div><br>
 
 <table style="width:100%; border-collapse:collapse;" border="1">
 
@@ -282,7 +288,7 @@ Total Entitlements : {{ currency }} {{ doc.total_entitlements or "0.00" }}
 
 
 
-<div class="section-title">Deductions :</div>
+<div class="section-title"><strong><u>Deductions :</u></strong></div><br>
 
 
 

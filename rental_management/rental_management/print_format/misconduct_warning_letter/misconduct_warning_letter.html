@@ -1,7 +1,6 @@
-{% if doc.title=="Non Compliance with Company Policy" %}
+{% if doc.title=="Misconduct Warning Letter" %}
 <style>
 
-    /* Specifically target the letterhead wrapper if space persists */
     .print-format table, .print-format tr, 
     .print-format td, .print-format div, .print-format p {
         font-weight: 500;
@@ -16,6 +15,7 @@
 
     @media screen {
         .print-format {
+
             padding: 0.30in;
             min-height: 11.7in;
         }
@@ -28,17 +28,23 @@
     .footer-img img{
         width:100%;
     }
+
     body {
-    margin:0 !important;
-    padding:0 !important;
-}
+        margin:0 !important;
+        padding:0 !important;
+    }
+
+    /* Spacing classes replacing <br> */
+    .space-sm { margin-top:10px; }
+    .space-md { margin-top:20px; }
+    .space-lg { margin-top:40px; }
+
 </style>
 
 
 {% set company = frappe.get_doc("Company", doc.company) %}
 {% set employee = frappe.get_doc("Employee", doc.employee) %}
 {% set letter_head = frappe.get_doc("Letter Head", company.default_letter_head) %}
-
 
 
 <!-- HEADER SECTION -->
@@ -58,8 +64,10 @@
 <!-- MAIN CONTENT -->
 
 <div class="print-format">
-<br><br>
-<div style="justify-content:space-between; 
+
+<br><br><br>
+
+<div style=" justify-content:space-between; 
 font-family:'Times New Roman', Times, serif; font-weight:bold;">
 
 <div>
@@ -71,58 +79,56 @@ font-family:'Times New Roman', Times, serif; font-weight:bold;">
 </div>
 
 </div>
-<br><br>
+
+<div class="space-lg"></div>
 
 
 <p>
-<b>To,<br>
-
+<b>
+To,<br>
 {{ employee.employee_name }},<br>
-
-Employee ID No. {{ employee.name }}</b>
+Employee ID No. {{ employee.name }}
+</b>
 </p>
 
-<br>
+<div class="space-md"></div>
 
 <p>
-<strong>Subject: Termination of Employment.</strong>
+<strong>Subject: Warning Letter for Misconduct </strong>
 </p>
-<br>
+
+<div class="space-md"></div>
 
 <p>
 Dear {% if employee.salutation %}{{ employee.salutation }}. {% endif %}{{ employee.employee_name }}
 </p>
-<br>
+
+<div class="space-md"></div>
 
 <p>
-This letter serves as formal notification that your employment with Orion International Facility Managment is terminated with effect {{frappe.utils.formatdate(doc.termination_date, "dd/MM/yyyy") }}.
-</p>
-<br>
-<p>
-It has been observed that you have repeatedly failed to comply with the company’s policies and procedures, despite prior warnings and instructions. Your actions are considered a serious violation of company rules and standards, and have adversely affected operations and workplace discipline.
-</p>
-<br>
-<p>
-The management has reviewed the matter and decided to terminate your employment due to continued non-compliance with company policies.
-</p>
-<br>
-<p>
-You are requested to complete all necessary handover formalities, return company property in your possession, and settle any dues as per company policy.
-</p>
-</br>
-
-<p>
-    We thank you for your services and wish you the best in your future endeavors.
+This letter serves as a formal warning regarding your recent misconduct. It has been reported that your behavior was not in accordance with the company’s policies and standards of professional conduct.
 </p>
 
+<div class="space-md"></div>
 
-<br>
+<p>
+Such actions are taken seriously, as they disrupt workplace discipline and negatively affect the work environment. 
+</p>
+
+<div class="space-md"></div>
+
+<p>
+You are hereby advised to treat this matter with utmost seriousness and ensure that such behavior is not repeated in the future. Failure to improve your conduct may result in further disciplinary action, which may include suspension or termination of employment.
+</p>
+
+<div class="space-lg"></div>
 
 <p>
 For <b>{{ company.company_name }}</b>
 </p>
 
-<br><br>
+<div class="space-lg"></div>
+<div class="space-lg"></div>
 
 <p>
 <strong>{% if doc.hr_salutation %}
@@ -134,8 +140,7 @@ HR Manager</strong>
 </p>
 
 
-
-<br><br><br>
+<div class="space-lg"></div>
 
 <div style="margin-top:40px; width:300px; margin-left:auto; font-family:'Times New Roman', Times, serif;">
 
@@ -164,14 +169,17 @@ HR Manager</strong>
     {% endif %}
 
 </div>
+
 {% else %}
+
 <div style="text-align:center; padding:40px; font-family:Helvetica;">
     <h3 style="color:#d9534f;">Incorrect Print Format Selected</h3>
     <p>
-        This print format is designed only for the <strong>Non Compliance with Company Policy</strong>.
+        This print format is designed only for the <strong>Warning Letter for Misconduct</strong>.
     </p>
     <p>
         Please select the correct print format to generate the document properly.
     </p>
 </div>
+
 {% endif %}

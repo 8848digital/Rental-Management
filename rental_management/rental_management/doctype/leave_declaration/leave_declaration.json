@@ -91,8 +91,7 @@
    "fieldname": "leave_days",
    "fieldtype": "Float",
    "label": "Leave Days",
-   "non_negative": 1,
-   "reqd": 1
+   "read_only": 1
   },
   {
    "fieldname": "passport_number",
@@ -111,7 +110,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-04-07 17:35:54.605537",
+ "modified": "2026-04-10 17:00:21.991614",
  "modified_by": "Administrator",
  "module": "Rental Management",
  "name": "LEAVE DECLARATION",
