@@ -1,4 +1,4 @@
-{% if doc.title=="Non Compliance with Company Policy" %}
+{% if doc.title=="Leave Policy Violation" %}
 <style>
 
     /* Specifically target the letterhead wrapper if space persists */
@@ -85,7 +85,7 @@ Employee ID No. {{ employee.name }}</b>
 <br>
 
 <p>
-<strong>Subject: Termination of Employment.</strong>
+<strong>Subject: Warning Letter for Leave policy violation.</strong>
 </p>
 <br>
 
@@ -95,25 +95,21 @@ Dear {% if employee.salutation %}{{ employee.salutation }}. {% endif %}{{ employ
 <br>
 
 <p>
-This letter serves as formal notification that your employment with Orion International Facility Managment is terminated with effect {{frappe.utils.formatdate(doc.termination_date, "dd/MM/yyyy") }}.
+This letter serves as a formal warning regarding your unauthorized extension of {{doc.leave_type}}.
 </p>
 <br>
 <p>
-It has been observed that you have repeatedly failed to comply with the company’s policies and procedures, despite prior warnings and instructions. Your actions are considered a serious violation of company rules and standards, and have adversely affected operations and workplace discipline.
+As per our records, you proceeded on emergency leave on {{frappe.utils.formatdate(doc.leave_start_date, "dd/MM/yyyy")}} and the leave was approved for {{ doc.approved_leave_days }} days. You reported back to duty only on {{frappe.utils.formatdate(doc.actual_return_date, "dd/MM/yyyy")}} without prior approval or proper communication regarding the extension of your leave.
 </p>
 <br>
 <p>
-The management has reviewed the matter and decided to terminate your employment due to continued non-compliance with company policies.
+Such absence without approval and failure to maintain communication is considered a serious violation of company policies and disrupts operational requirements.
 </p>
 <br>
 <p>
-You are requested to complete all necessary handover formalities, return company property in your possession, and settle any dues as per company policy.
+You are hereby advised to strictly adhere to company rules and ensure that any leave extension is properly communicated and approved in advance. Any repetition of such misconduct may result in further disciplinary action, which could include suspension or termination of employment.
 </p>
-</br>
 
-<p>
-    We thank you for your services and wish you the best in your future endeavors.
-</p>
 
 
 <br>
@@ -168,7 +164,7 @@ HR Manager</strong>
 <div style="text-align:center; padding:40px; font-family:Helvetica;">
     <h3 style="color:#d9534f;">Incorrect Print Format Selected</h3>
     <p>
-        This print format is designed only for the <strong>Non Compliance with Company Policy</strong>.
+        This print format is designed only for the <strong>Leave Policy Violation</strong>.
     </p>
     <p>
         Please select the correct print format to generate the document properly.

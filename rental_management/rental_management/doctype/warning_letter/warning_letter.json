@@ -50,7 +50,7 @@
    "fieldname": "title",
    "fieldtype": "Select",
    "label": "Title",
-   "options": "\nNegligence of Work\nWarning for Physical Misconduct\nSafety Violation\nLeave Policy Violation\nAlcohol Consumption\nNot Following Company Policy\nNot Following Supervisor Instructions\nMisconduct Warning Letter\nAttendance Improvement Letter\nDiesel Theft\nRefusal to Work\nPoor Performance\nTermination of Employment\nNon Compliance with Company Policy\nPoor Performance\nUNDERTAKING LETTER"
+   "options": "\nNegligence of Work\nWarning for Physical Misconduct\nSafety Violation\nLeave Policy Violation\nAlcohol Consumption\nNot Following Company Policy\nNot Following Supervisor Instructions\nMisconduct Warning Letter\nAttendance Improvement Letter\nDiesel Theft\nRefusal to Work\nPoor Performance\nTermination of Employment\nNon Compliance with Company Policy\nPerformance Improvement"
   },
   {
    "fieldname": "company",
@@ -160,7 +160,7 @@
    "fieldname": "leave_type",
    "fieldtype": "Link",
    "label": "Leave Type",
-   "mandatory_depends_on": "eval.doc.title=='Leave Policy Violation'",
+   "mandatory_depends_on": "eval:doc.title=='Leave Policy Violation'",
    "options": "Leave Type"
   },
   {
@@ -169,7 +169,7 @@
    "fieldname": "leave_start_date",
    "fieldtype": "Date",
    "label": "Leave Start Date",
-   "mandatory_depends_on": "eval.doc.title=='Leave Policy Violation'"
+   "mandatory_depends_on": "eval:doc.title=='Leave Policy Violation'"
   },
   {
    "depends_on": "eval:doc.title=='Leave Policy Violation'",
@@ -177,7 +177,7 @@
    "fieldname": "actual_return_date",
    "fieldtype": "Date",
    "label": "Actual Return Date",
-   "mandatory_depends_on": "eval.doc.title=='Leave Policy Violation'"
+   "mandatory_depends_on": "eval:doc.title=='Leave Policy Violation'"
   },
   {
    "depends_on": "eval:doc.title=='Leave Policy Violation'",
@@ -185,7 +185,7 @@
    "fieldname": "approved_leave_days",
    "fieldtype": "Float",
    "label": "Approved Leave Days",
-   "mandatory_depends_on": "eval.doc.title=='Leave Policy Violation'"
+   "mandatory_depends_on": "eval:doc.title=='Leave Policy Violation'"
   },
   {
    "fieldname": "hr_salutation",
@@ -212,7 +212,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-04-08 22:22:03.888742",
+ "modified": "2026-04-10 15:28:31.745340",
  "modified_by": "Administrator",
  "module": "Rental Management",
  "name": "Warning Letter",

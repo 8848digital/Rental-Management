@@ -1,4 +1,4 @@
-{% if doc.title=="Non Compliance with Company Policy" %}
+{% if doc.title=="Performance Improvement" %}
 <style>
 
     /* Specifically target the letterhead wrapper if space persists */
@@ -85,7 +85,7 @@ Employee ID No. {{ employee.name }}</b>
 <br>
 
 <p>
-<strong>Subject: Termination of Employment.</strong>
+<strong>Subject: Warning Letter for Performance Improvement</strong>
 </p>
 <br>
 
@@ -95,25 +95,21 @@ Dear {% if employee.salutation %}{{ employee.salutation }}. {% endif %}{{ employ
 <br>
 
 <p>
-This letter serves as formal notification that your employment with Orion International Facility Managment is terminated with effect {{frappe.utils.formatdate(doc.termination_date, "dd/MM/yyyy") }}.
+This is to inform you that your performance has been below the expected standards of the company in your role as {{ employee.designation }}.
 </p>
 <br>
 <p>
-It has been observed that you have repeatedly failed to comply with the company’s policies and procedures, despite prior warnings and instructions. Your actions are considered a serious violation of company rules and standards, and have adversely affected operations and workplace discipline.
+It has been observed that you are not completing your assigned tasks on time and the quality of your work is not satisfactory. This is affecting the overall work flow.
 </p>
 <br>
 <p>
-The management has reviewed the matter and decided to terminate your employment due to continued non-compliance with company policies.
+You are advised to improve your performance, focus on your responsibilities, and ensure that all tasks are completed properly and within the given deadlines.
 </p>
 <br>
 <p>
-You are requested to complete all necessary handover formalities, return company property in your possession, and settle any dues as per company policy.
+Please treat this matter seriously and show immediate improvement. Failure to do so may result in further disciplinary action.
 </p>
-</br>
 
-<p>
-    We thank you for your services and wish you the best in your future endeavors.
-</p>
 
 
 <br>
@@ -168,7 +164,7 @@ HR Manager</strong>
 <div style="text-align:center; padding:40px; font-family:Helvetica;">
     <h3 style="color:#d9534f;">Incorrect Print Format Selected</h3>
     <p>
-        This print format is designed only for the <strong>Non Compliance with Company Policy</strong>.
+        This print format is designed only for the <strong>Performance Improvement</strong>.
     </p>
     <p>
         Please select the correct print format to generate the document properly.

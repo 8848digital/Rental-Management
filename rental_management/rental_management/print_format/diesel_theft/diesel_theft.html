@@ -1,9 +1,10 @@
-{% if doc.title=="Non Compliance with Company Policy" %}
+{% if doc.title=="Diesel Theft" %}
 <style>
 
     /* Specifically target the letterhead wrapper if space persists */
     .print-format table, .print-format tr, 
     .print-format td, .print-format div, .print-format p {
+        font-family: Helvetica;
         font-weight: 500;
         vertical-align: middle;
         line-height: 100%;
@@ -85,7 +86,7 @@ Employee ID No. {{ employee.name }}</b>
 <br>
 
 <p>
-<strong>Subject: Termination of Employment.</strong>
+<strong>Subject: Warning Letter for Diesel Theft</strong>
 </p>
 <br>
 
@@ -95,25 +96,21 @@ Dear {% if employee.salutation %}{{ employee.salutation }}. {% endif %}{{ employ
 <br>
 
 <p>
-This letter serves as formal notification that your employment with Orion International Facility Managment is terminated with effect {{frappe.utils.formatdate(doc.termination_date, "dd/MM/yyyy") }}.
+This letter is to formally address a confirmed incident of diesel theft that took place in the company.
 </p>
 <br>
 <p>
-It has been observed that you have repeatedly failed to comply with the company’s policies and procedures, despite prior warnings and instructions. Your actions are considered a serious violation of company rules and standards, and have adversely affected operations and workplace discipline.
+Following an internal investigation, it has been verified that you were involved in diesel theft while the vehicle was under your control. The FMSI system and fuel reports showed unusual fuel usage during your duty time.
 </p>
 <br>
 <p>
-The management has reviewed the matter and decided to terminate your employment due to continued non-compliance with company policies.
+Such conduct constitutes a serious violation of company policies and professional ethics and is also negatively affecting the company’s image in front of clients. As a result, you are hereby issued a warning for your involvement in diesel theft.
 </p>
 <br>
 <p>
-You are requested to complete all necessary handover formalities, return company property in your possession, and settle any dues as per company policy.
+You are strictly advised to avoid any such behaviour in the future. Any recurrence of similar misconduct will lead to police complaint, legal actions and immediate termination of your employment.
 </p>
-</br>
 
-<p>
-    We thank you for your services and wish you the best in your future endeavors.
-</p>
 
 
 <br>
@@ -168,7 +165,7 @@ HR Manager</strong>
 <div style="text-align:center; padding:40px; font-family:Helvetica;">
     <h3 style="color:#d9534f;">Incorrect Print Format Selected</h3>
     <p>
-        This print format is designed only for the <strong>Non Compliance with Company Policy</strong>.
+        This print format is designed only for the <strong>Diesel Theft</strong>.
     </p>
     <p>
         Please select the correct print format to generate the document properly.

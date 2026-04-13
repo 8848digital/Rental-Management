@@ -27,3 +27,29 @@ class LEAVEDECLARATION(Document):
 		passport_number: DF.Data
 	# end: auto-generated types
 	pass
+
+import frappe
+
+@frappe.whitelist()
+def get_passport_number(employee):
+    """
+    Fetch the Passport Number of an employee from the Custom Certificates child table.
+    Args:
+        employee (str): Employee ID selected in the LEAVE DECLARATION form.
+
+    Returns:
+        str | None: Passport number (reference_no) if found, otherwise None.
+    """
+
+    # Fetch reference_no from Custom Certificates child table
+    passport = frappe.db.get_value(
+        "Employee cdt",
+        {
+            "parent": employee,
+            "certification_name": "Passport no"
+        },
+        "reference_no"
+    )
+
+    # Return the fetched passport number
+    return passport

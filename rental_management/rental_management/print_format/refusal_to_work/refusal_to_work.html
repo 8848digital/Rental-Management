@@ -1,4 +1,4 @@
-{% if doc.title=="Non Compliance with Company Policy" %}
+{% if doc.title=="Refusal to Work" %}
 <style>
 
     /* Specifically target the letterhead wrapper if space persists */
@@ -85,7 +85,7 @@ Employee ID No. {{ employee.name }}</b>
 <br>
 
 <p>
-<strong>Subject: Termination of Employment.</strong>
+<strong>Subject: Warning letter for Refusal of Work.</strong>
 </p>
 <br>
 
@@ -95,25 +95,21 @@ Dear {% if employee.salutation %}{{ employee.salutation }}. {% endif %}{{ employ
 <br>
 
 <p>
-This letter serves as formal notification that your employment with Orion International Facility Managment is terminated with effect {{frappe.utils.formatdate(doc.termination_date, "dd/MM/yyyy") }}.
+This letter serves as a final warning regarding your refusal to perform your assigned duties. 
 </p>
 <br>
 <p>
-It has been observed that you have repeatedly failed to comply with the company’s policies and procedures, despite prior warnings and instructions. Your actions are considered a serious violation of company rules and standards, and have adversely affected operations and workplace discipline.
+You have refused to resume your assigned work duties and have not performed any work since that date. Such behavior is unacceptable, constitutes serious misconduct, and disrupts company operations. You are hereby instructed to immediately resume your assigned duties and strictly adhere to all company policies, rules, and instructions.
 </p>
 <br>
 <p>
-The management has reviewed the matter and decided to terminate your employment due to continued non-compliance with company policies.
+Failure to comply with this warning or any repetition of such misconduct will result in strict disciplinary action, which may include termination of your employment without further notice.
 </p>
 <br>
 <p>
-You are requested to complete all necessary handover formalities, return company property in your possession, and settle any dues as per company policy.
+You are required to acknowledge receipt of this letter by signing below.
 </p>
-</br>
 
-<p>
-    We thank you for your services and wish you the best in your future endeavors.
-</p>
 
 
 <br>
@@ -168,7 +164,7 @@ HR Manager</strong>
 <div style="text-align:center; padding:40px; font-family:Helvetica;">
     <h3 style="color:#d9534f;">Incorrect Print Format Selected</h3>
     <p>
-        This print format is designed only for the <strong>Non Compliance with Company Policy</strong>.
+        This print format is designed only for the <strong>Refusal to Work</strong>.
     </p>
     <p>
         Please select the correct print format to generate the document properly.
