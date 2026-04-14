@@ -1,5 +1,4 @@
 frappe.ui.form.on('Employee', {
-
     // Trigger salary total calculation when any salary component changes
     custom_basic_salary: calculate_total,
     custom_hra: calculate_total,
@@ -33,11 +32,30 @@ frappe.ui.form.on('Employee', {
     },
 
     // Setup runs when form loads
-    setup: function(frm) {
+        setup(frm) {
 
-        // Set emergency contact defaults if company already selected
-        set_emergency_defaults(frm);
+        // Loop through all fields available in the Employee form
+        Object.keys(frm.fields_dict).forEach(fieldname => {
 
+            // Get the field object from the form
+            let field = frm.fields_dict[fieldname];
+
+            // This ensures the logic only applies to fields where options = User
+            if (field.df.fieldtype === "Link" && field.df.options === "User") {
+                // This replaces the default User search with our custom query
+                frm.set_query(fieldname, function () {
+                    return {
+                        // Employee ID + Employee Name instead of email
+                        query: "rental_management.rental_management.doctype.employee.user_by_employee"
+                    };
+                });
+
+            }
+
+        });
+
+
+    
         // Ensure driver logic also works on form load
         if (frm.doc.designation) {
             frappe.db.get_value(
@@ -81,23 +99,6 @@ function calculate_probation(frm) {
         frm.set_value("custom_probation_end_date", end_date);
     }
 
-}
-
-
-// Fetch emergency contact defaults from Company doctype
-function set_emergency_defaults(frm) {
-
-    if (!frm.doc.company) return;
-
-    frappe.db.get_doc("Company", frm.doc.company).then(company => {
-
-        // Set default country code in emergency phone field
-        if (company.custom_country_code) {
-            frm.set_value("emergency_phone_number", company.custom_country_code);
-        }
-
-
-    });
 }
 
 

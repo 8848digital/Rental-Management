@@ -3028,7 +3028,7 @@
    "fetch_from": null,
    "fetch_if_empty": 0,
    "fieldname": "custom_nationality",
-   "fieldtype": "Data",
+   "fieldtype": "Link",
    "hidden": 0,
    "hide_border": 0,
    "hide_days": 0,
@@ -3053,7 +3053,7 @@
    "name": "Employee-custom_nationality",
    "no_copy": 0,
    "non_negative": 0,
-   "options": null,
+   "options": "Nationality",
    "owner": "priya@8848digital.com",
    "permlevel": 0,
    "placeholder": null,
@@ -5432,6 +5432,15 @@
    "row_name": null,
    "value": ""
   },
+  {
+ "doctype": "Property Setter",
+ "doc_type": "Employee",
+ "doctype_or_field": "DocField",
+ "field_name": "emergency_phone_number",
+ "property": "fieldtype",
+ "property_type": "Data",
+ "value": "Phone"
+},
   {
    "_assign": null,
    "_comments": null,
