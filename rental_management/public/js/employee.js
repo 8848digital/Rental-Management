@@ -31,9 +31,9 @@ frappe.ui.form.on('Employee', {
         }
     },
 
-    // Setup runs when form loads
         setup(frm) {
-
+        calculate_probation(frm);
+        
         // Loop through all fields available in the Employee form
         Object.keys(frm.fields_dict).forEach(fieldname => {
 
@@ -91,14 +91,13 @@ function calculate_probation(frm) {
 
     if (frm.doc.final_confirmation_date && frm.doc.custom_probation_period) {
 
-        let end_date = frappe.datetime.add_days(
+        let end_date = frappe.datetime.add_months(
             frm.doc.final_confirmation_date,
             frm.doc.custom_probation_period
         );
 
         frm.set_value("custom_probation_end_date", end_date);
     }
-
 }
 
 

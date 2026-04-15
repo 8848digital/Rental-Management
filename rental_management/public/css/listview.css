@@ -1,0 +1,6 @@
+.list-row .level-right, 
+.list-row-head .level-right {
+    flex: none !important;
+    overflow: visible;
+    align-items: center;
+}
