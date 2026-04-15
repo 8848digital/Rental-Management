@@ -3,28 +3,28 @@ from frappe.utils import today, date_diff
 
 
 def certificate_expiry_notification():
-    """
-    Scheduled job to send email notifications for employee certificate expiry.
-
-    This function:
-    - Reads notification configurations from 'Employee Certificate Notification Settings'.
-    - Checks each employee's certificates for expiry dates.
-    - Sends email notifications when the remaining days match the configured notification days.
-    """
 
     settings = frappe.get_single("Employee Certificate Notification Settings")
 
-    employees = frappe.get_all("Employee", fields=["name", "user_id"])
+    if settings.disable_notification:
+        return
 
-    # Track notifications already sent to employees to avoid duplicates
     sent_employee_notifications = set()
 
     for config in settings.employee_certificate_notification_detail:
 
         notify_days = config.notify_before_days
 
-        # Fetch role users once per config
         role_recipients = get_users_by_role(config.role)
+
+        filters, or_filters = parse_condition(config.condition)
+
+        employees = frappe.get_all(
+            "Employee",
+            fields=["name", "user_id"],
+            filters=filters,
+            or_filters=or_filters
+        )
 
         for emp in employees:
 
@@ -42,14 +42,30 @@ def certificate_expiry_notification():
                 if days_left != notify_days:
                     continue
 
-                context = {"doc": cert}
+                # inject employee fields into cert
+                for key, value in emp_doc.as_dict().items():
+                    if not hasattr(cert, key):
+                        setattr(cert, key, value)
+
+                # inject fields from all employee child tables
+                for table in emp_doc.meta.get_table_fields():
+                    rows = emp_doc.get(table.fieldname)
+
+                    for row in rows:
+                        for key, value in row.as_dict().items():
+                            if not hasattr(cert, key):
+                                setattr(cert, key, value)
+                
+                context = {
+                    "doc": cert,
+                    "employee": emp_doc
+                }
 
                 subject = frappe.render_template(config.subject, context)
                 message = frappe.render_template(config.message, context)
 
                 recipients = list(role_recipients)
 
-                # Send email to employee if enabled
                 if config.trigger_email_to_employee and emp_doc.user_id:
 
                     key = (emp_doc.name, cert.certification_name)
@@ -90,3 +106,45 @@ def get_users_by_role(role_name):
     )
 
     return list(set(emails))
+
+import re
+
+def parse_condition(condition):
+    """
+    Convert condition
+    into frappe filters and or_filters
+    """
+
+    if not condition:
+        return {}, []
+
+    condition = condition.replace("doc.", "")
+
+    filters = {}
+    or_filters = []
+
+    # split OR
+    or_parts = [p.strip() for p in condition.split(" or ")]
+
+    for part in or_parts:
+
+        and_parts = [p.strip() for p in part.split(" and ")]
+
+        temp = []
+
+        for cond in and_parts:
+
+            match = re.match(r'(\w+)\s*==\s*["\'](.+?)["\']', cond)
+
+            if match:
+                field, value = match.groups()
+
+                if len(or_parts) == 1:
+                    filters[field] = value
+                else:
+                    temp.append([field, "=", value])
+
+        if temp:
+            or_filters.extend(temp)
+
+    return filters, or_filters
