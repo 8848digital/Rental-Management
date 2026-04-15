@@ -55,7 +55,7 @@ def certificate_expiry_notification():
                         for key, value in row.as_dict().items():
                             if not hasattr(cert, key):
                                 setattr(cert, key, value)
-                print(emp)
+                
                 context = {
                     "doc": cert,
                     "employee": emp_doc
