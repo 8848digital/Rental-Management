@@ -61,7 +61,7 @@ frappe.views.ListView.prototype.setup_columns = function () {
 
 
 /*
-   REMOVE LIKE ICON
+   REMOVE LIKE ICON + COMMENT ICON
 */
 
 frappe.views.ListView.prototype.get_meta_html = function (doc) {
@@ -72,21 +72,9 @@ frappe.views.ListView.prototype.get_meta_html = function (doc) {
 
     const modified = comment_when(doc.modified, true);
 
-    let comment_count = "";
-
-    if (this.list_view_settings && !this.list_view_settings.disable_comment_count) {
-        comment_count = `
-            <span class="comment-count d-flex align-items-center">
-                ${frappe.utils.icon("es-line-chat-alt")}
-                ${doc._comment_count > 99 ? "99+" : doc._comment_count || 0}
-            </span>
-        `;
-    }
-
     return `
         <div class="level-item list-row-activity hidden-xs">
             <span class="modified">${modified}</span>
-            ${comment_count}
         </div>
         <div class="level-item visible-xs text-right">
             ${this.get_indicator_html(doc)}

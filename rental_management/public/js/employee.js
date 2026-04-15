@@ -5,12 +5,12 @@ frappe.ui.form.on('Employee', {
     custom_ot_allowances: calculate_total,
     custom_food_allowances: calculate_total,
     custom_transportation_allowances: calculate_total,
-
-    // When company is selected, fetch default emergency contact details from Company doctype
-    company(frm) {
-        set_emergency_defaults(frm);
-    },
-
+    
+    custom_basic: calculate_total_offered_salary,
+    custom_house_rent_allowances: calculate_total_offered_salary,
+    custom_food_allowances_fa:calculate_total_offered_salary,
+    custom_other_allowances: calculate_total_offered_salary,
+    custom_transportation_allowance: calculate_total_offered_salary,
     // Check if the selected designation is marked as Driver
     // If yes, show the Driving Licence field, otherwise hide it
     designation: function(frm) {
@@ -33,7 +33,8 @@ frappe.ui.form.on('Employee', {
 
         setup(frm) {
         calculate_probation(frm);
-        
+        calculate_total(frm),
+        calculate_total_offered_salary(frm),
         // Loop through all fields available in the Employee form
         Object.keys(frm.fields_dict).forEach(fieldname => {
 
@@ -113,4 +114,17 @@ function calculate_total(frm) {
 
     // Set calculated value in Total Salary field
     frm.set_value("custom_total_salary", total);
+}
+
+function calculate_total_offered_salary(frm) {
+
+    let total =
+        (parseInt(frm.doc.custom_basic) || 0) +
+        (parseInt(frm.doc.custom_house_rent_allowances) || 0) +
+        (parseInt(frm.doc.custom_other_allowances) || 0) +
+        (parseInt(frm.doc.custom_food_allowances_fa) || 0) +
+        (parseInt(frm.doc.custom_transportation_allowance) || 0);
+
+    // Set calculated value in Total Salary field
+    frm.set_value("custom_total_salary_as_per_offer_letter", total);
 }
