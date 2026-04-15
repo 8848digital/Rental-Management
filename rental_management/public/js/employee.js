@@ -34,26 +34,26 @@ frappe.ui.form.on('Employee', {
         setup(frm) {
         calculate_probation(frm);
         calculate_total(frm),
-        calculate_total_offered_salary(frm),
+        calculate_total_offered_salary(frm)
         // Loop through all fields available in the Employee form
-        Object.keys(frm.fields_dict).forEach(fieldname => {
+        // Object.keys(frm.fields_dict).forEach(fieldname => {
 
-            // Get the field object from the form
-            let field = frm.fields_dict[fieldname];
+        //     // Get the field object from the form
+        //     let field = frm.fields_dict[fieldname];
 
-            // This ensures the logic only applies to fields where options = User
-            if (field.df.fieldtype === "Link" && field.df.options === "User") {
-                // This replaces the default User search with our custom query
-                frm.set_query(fieldname, function () {
-                    return {
-                        // Employee ID + Employee Name instead of email
-                        query: "rental_management.rental_management.doctype.employee.user_by_employee"
-                    };
-                });
+        //     // This ensures the logic only applies to fields where options = User
+        //     if (field.df.fieldtype === "Link" && field.df.options === "User") {
+        //         // This replaces the default User search with our custom query
+        //         frm.set_query(fieldname, function () {
+        //             return {
+        //                 // Employee ID + Employee Name instead of email
+        //                 query: "rental_management.rental_management.doctype.employee.user_by_employee"
+        //             };
+        //         });
 
-            }
+        //     }
 
-        });
+        // });
 
 
     
