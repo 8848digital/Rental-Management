@@ -5,21 +5,21 @@ frappe.ui.form.on('Employee', {
     custom_ot_allowances: calculate_total,
     custom_food_allowances: calculate_total,
     custom_transportation_allowances: calculate_total,
-    
+
     custom_basic: calculate_total_offered_salary,
     custom_house_rent_allowances: calculate_total_offered_salary,
-    custom_food_allowances_fa:calculate_total_offered_salary,
+    custom_food_allowances_fa: calculate_total_offered_salary,
     custom_other_allowances: calculate_total_offered_salary,
     custom_transportation_allowance: calculate_total_offered_salary,
     // Check if the selected designation is marked as Driver
     // If yes, show the Driving Licence field, otherwise hide it
-    designation: function(frm) {
+    designation: function (frm) {
         if (frm.doc.designation) {
             frappe.db.get_value(
                 "Designation",
                 frm.doc.designation,
                 "custom_is_driver",
-                function(r) {
+                function (r) {
                     if (r.custom_is_driver) {
                         frm.set_df_property("custom_type_of_driving_licence", "hidden", 0);
                     } else {
@@ -31,10 +31,10 @@ frappe.ui.form.on('Employee', {
         }
     },
 
-        setup(frm) {
+    setup(frm) {
         calculate_probation(frm);
         calculate_total(frm),
-        calculate_total_offered_salary(frm)
+            calculate_total_offered_salary(frm)
         // Loop through all fields available in the Employee form
         Object.keys(frm.fields_dict).forEach(fieldname => {
 
@@ -56,14 +56,14 @@ frappe.ui.form.on('Employee', {
         });
 
 
-    
+
         // Ensure driver logic also works on form load
         if (frm.doc.designation) {
             frappe.db.get_value(
                 "Designation",
                 frm.doc.designation,
                 "custom_is_driver",
-                function(r) {
+                function (r) {
                     frm.set_df_property(
                         "custom_type_of_driving_licence",
                         "hidden",
@@ -82,6 +82,18 @@ frappe.ui.form.on('Employee', {
     // Recalculate probation end date when probation period changes
     custom_probation_period(frm) {
         calculate_probation(frm);
+    },
+
+    onload: function(frm) {
+        if (frm.doc.custom_employee_category === "Non-Office") {
+            frm.set_value("final_confirmation_date", frm.doc.scheduled_confirmation_date);
+        }
+    },
+
+    scheduled_confirmation_date: function(frm) {
+        if (frm.doc.custom_employee_category === "Non-Office") {
+            frm.set_value("final_confirmation_date", frm.doc.scheduled_confirmation_date);
+        }
     }
 
 });
