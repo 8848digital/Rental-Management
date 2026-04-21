@@ -1,0 +1,62 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-04-18 20:49:54.637744",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "ticket_entitlement_tab",
+  "ticket_entitlement_detail",
+  "sales_invoice_tab",
+  "company_logo"
+ ],
+ "fields": [
+  {
+   "fieldname": "ticket_entitlement_tab",
+   "fieldtype": "Tab Break",
+   "label": "Ticket Entitlement"
+  },
+  {
+   "fieldname": "ticket_entitlement_detail",
+   "fieldtype": "Table",
+   "label": "Ticket Entitlement Detail",
+   "options": "Ticket Entitlement"
+  },
+  {
+   "fieldname": "sales_invoice_tab",
+   "fieldtype": "Tab Break",
+   "label": "Sales Invoice"
+  },
+  {
+   "fieldname": "company_logo",
+   "fieldtype": "Attach Image",
+   "label": "Company Logo"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-04-19 20:52:10.987552",
+ "modified_by": "Administrator",
+ "module": "Rental Management",
+ "name": "Orion Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
