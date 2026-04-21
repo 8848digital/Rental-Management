@@ -25,9 +25,6 @@ def user_by_employee(doctype, txt, searchfield, start, page_len, filters):
 
     return users
 
-import frappe
-from frappe.utils import today, date_diff, add_days, flt
-
 
 def create_ticket_allowance():
 
@@ -88,5 +85,3 @@ def create_ticket_allowance():
                 "amount": rule.amount,
                 "paid": 0
             }).insert(ignore_permissions=True)
-
-    frappe.db.commit()
