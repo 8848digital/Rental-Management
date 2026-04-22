@@ -2,7 +2,14 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on('Leave Settlement', {
+    date_of_settlement:function(frm) {
+        fetch_ticket_allowance(frm);
+    },
+    type_of_settlement: function(frm) {
+        fetch_ticket_allowance(frm);
+    },
     employee: function(frm) {
+        fetch_ticket_allowance(frm);
         if (!frm.doc.employee) return;
 
         frappe.db.get_doc('Employee', frm.doc.employee).then(emp => {
@@ -16,6 +23,42 @@ frappe.ui.form.on('Leave Settlement', {
 
             frm.set_value("monthly_salary", monthly_salary);
         });
+
+
+        if (!frm.doc.employee || !frm.doc.date_of_settlement) return;
+
+        const allowed_types = [
+            "Vacation Settlement",
+            "Final Settlement",
+            "Internal Transfer Settlement"
+        ];
+
+        if (!allowed_types.includes(frm.doc.type_of_settlement)) return;
+
+        frappe.call({
+            method: "rental_management.rental_management.doctype.leave_settlement.leave_settlement.get_ticket_allowance",
+            args: {
+                employee: frm.doc.employee,
+                settlement_date: frm.doc.date_of_settlement
+            },
+            callback: function(r) {
+
+                if (!r.message) return;
+
+                frm.clear_table("ticket_allowance");
+
+                r.message.forEach(row => {
+                    let d = frm.add_child("ticket_allowance");
+
+                    d.from = row.from;
+                    d.to = row.to;
+                    d.amount = row.amount;
+                });
+
+                frm.refresh_field("ticket_allowance");
+            }
+        });
+
     },
     last_working_day: function(frm) {
         calculate_total_service(frm);
@@ -135,4 +178,49 @@ function calculate_row(frm, cdt, cdn){
 
         frappe.model.set_value(cdt, cdn, "amount", amount);
     }
+}
+
+function fetch_ticket_allowance(frm) {
+
+    if (!frm.doc.employee || !frm.doc.date_of_settlement) return;
+
+    const allowed_types = [
+        "Vacation Settlement",
+        "Final Settlement",
+        "Internal Transfer Settlement"
+    ];
+
+    if (!allowed_types.includes(frm.doc.type_of_settlement)) return;
+
+    frappe.call({
+
+        method: "rental_management.rental_management.doctype.leave_settlement.leave_settlement.get_ticket_allowance",
+
+        args: {
+            employee: frm.doc.employee,
+            settlement_date: frm.doc.date_of_settlement
+        },
+
+        callback: function(r) {
+
+            if (!r.message) return;
+
+            frm.clear_table("ticket_allowance");
+
+            r.message.forEach(row => {
+
+                let d = frm.add_child("ticket_allowance");
+
+                d.from = row.from;
+                d.to = row.to;
+                d.amount = row.amount;
+
+            });
+
+            frm.refresh_field("ticket_allowance");
+
+        }
+
+    });
+
 }

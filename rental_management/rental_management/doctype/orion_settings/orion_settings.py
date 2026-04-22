@@ -16,6 +16,7 @@ class OrionSettings(Document):
 		from rental_management.rental_management.doctype.ticket_entitlement.ticket_entitlement import TicketEntitlement
 
 		company_logo: DF.AttachImage | None
+		manual_paid_check_read_only_date: DF.Date | None
 		ticket_entitlement_detail: DF.Table[TicketEntitlement]
 	# end: auto-generated types
 	pass
