@@ -6,3 +6,4 @@
 # Patches added in this section will be executed after doctypes are migrated
 rental_management.patches.update_probation_end_date
 rental_management.patches.fix_invalid_cell_numbers
+rental_management.patches.set_user_id_in_employee
