@@ -79,9 +79,6 @@ def create_ticket_allowance():
                 )
 
                 if not exists:
-
-                    print(emp.name, from_date, to_date)
-
                     # Create ticket allowance child record
                     frappe.get_doc({
                         "doctype": "Ticket Allowance Detail",
