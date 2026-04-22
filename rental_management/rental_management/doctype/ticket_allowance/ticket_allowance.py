@@ -15,7 +15,6 @@ class TicketAllowance(Document):
 		from frappe.types import DF
 
 		amount: DF.Currency
-		days: DF.Float
 		parent: DF.Data
 		parentfield: DF.Data
 		parenttype: DF.Data

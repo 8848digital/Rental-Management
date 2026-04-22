@@ -165,6 +165,9 @@ fixtures = [
 # }
 
 doc_events = {
+    "Leave Settlement": {
+        "on_submit": "rental_management.rental_management.doctype.leave_settlement.leave_settlement.mark_ticket_paid"
+    },
     "Vehicle": {
         "validate": "rental_management.rental_management.validations.vehicle_hooks.validate_vehicle"
     },
@@ -191,7 +194,8 @@ scheduler_events = {
 	# ],
 	"daily": [
 		"rental_management.tasks.daily.daily",
-        "rental_management.rental_management.scripts.certificate_notification.certificate_expiry_notification"
+        "rental_management.rental_management.scripts.certificate_notification.certificate_expiry_notification",
+        "rental_management.rental_management.doctype.employee.create_ticket_allowance"
 	],
 	# "hourly": [
 	# 	"rental_management.tasks.hourly"

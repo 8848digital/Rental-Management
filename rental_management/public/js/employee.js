@@ -1,3 +1,4 @@
+let manual_paid_lock_date = null;
 frappe.ui.form.on('Employee', {
     // Trigger salary total calculation when any salary component changes
     custom_basic_salary: calculate_total,
@@ -85,6 +86,7 @@ frappe.ui.form.on('Employee', {
     },
 
     onload: function(frm) {
+        
         if (frm.doc.custom_employee_category === "Non-Office") {
             frm.set_value("final_confirmation_date", frm.doc.scheduled_confirmation_date);
         }
@@ -94,6 +96,18 @@ frappe.ui.form.on('Employee', {
         if (frm.doc.custom_employee_category === "Non-Office") {
             frm.set_value("final_confirmation_date", frm.doc.scheduled_confirmation_date);
         }
+    },
+    refresh(frm) {
+
+        // fetch the setting once
+        frappe.call({
+            method: "rental_management.rental_management.doctype.employee.get_manual_paid_lock_date",
+            callback: function(r) {
+                manual_paid_lock_date = r.message;
+            }
+        });
+
+        sort_ticket_allowance(frm);
     }
 
 });
@@ -139,4 +153,79 @@ function calculate_total_offered_salary(frm) {
 
     // Set calculated value in Total Salary field
     frm.set_value("custom_total_salary_as_per_offer_letter", total);
+}
+
+function lock_manual_paid(frm) {
+
+    if (!frm.doc.manual_paid_check_read_only_date) return;
+
+    let lock_date = frappe.datetime.str_to_obj(frm.doc.manual_paid_check_read_only_date);
+
+    let grid = frm.fields_dict.custom_ticket_allowance_detail.grid;
+
+    grid.grid_rows.forEach(row => {
+
+        if (!row.doc.from) return;
+
+        let row_from = frappe.datetime.str_to_obj(row.doc.from);
+
+        if (row_from >= lock_date) {
+
+            // disable checkbox editing
+            row.toggle_editable("manual_paid", false);
+
+        } else {
+
+            // allow editing
+            row.toggle_editable("manual_paid", true);
+
+        }
+
+    });
+
+}
+
+frappe.ui.form.on('Ticket Allowance Detail', {
+    form_render(frm, cdt, cdn) {
+
+        // Stop execution if lock date from Orion Settings is not loaded
+        if (!manual_paid_lock_date) return;
+
+        let row = locals[cdt][cdn];
+
+        if (!row.from_date) return;
+
+        let lock_dt = frappe.datetime.str_to_obj(manual_paid_lock_date);
+        let row_from = frappe.datetime.str_to_obj(row.from_date);
+
+        if (row_from >= lock_dt) {
+
+            // Make the manual_paid checkbox read-only for this row
+            frm.fields_dict.custom_ticket_allowance_detail
+                .grid.grid_rows_by_docname[cdn]
+                .toggle_editable("manual_paid", false);
+
+        } else {
+
+            // Otherwise allow editing of the checkbox
+            frm.fields_dict.custom_ticket_allowance_detail
+                .grid.grid_rows_by_docname[cdn]
+                .toggle_editable("manual_paid", true);
+
+        }
+
+    }
+});
+
+function sort_ticket_allowance(frm) {
+
+    if (!frm.doc.custom_ticket_allowance_detail) return;
+
+    // Sort rows by from_date
+    frm.doc.custom_ticket_allowance_detail.sort(function(a, b) {
+        return new Date(a.from_date) - new Date(b.from_date);
+    });
+
+    // Refresh the child table UI
+    frm.refresh_field("custom_ticket_allowance_detail");
 }

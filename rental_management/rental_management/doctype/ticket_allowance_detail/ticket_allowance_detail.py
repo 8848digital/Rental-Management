@@ -16,6 +16,7 @@ class TicketAllowanceDetail(Document):
 
 		amount: DF.Currency
 		from_date: DF.Date | None
+		manual_paid: DF.Check
 		paid: DF.Check
 		parent: DF.Data
 		parentfield: DF.Data

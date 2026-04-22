@@ -13,6 +13,7 @@
   "position",
   "department",
   "column_break_orai",
+  "posting_date",
   "date_of_settlement",
   "monthly_salary",
   "doj__re_joining_date",
@@ -103,7 +104,7 @@
    "fieldname": "date_of_settlement",
    "fieldtype": "Date",
    "label": "Date of Settlement",
-   "read_only": 1
+   "reqd": 1
   },
   {
    "fieldname": "monthly_salary",
@@ -243,13 +244,20 @@
    "label": "Company",
    "options": "Company",
    "reqd": 1
+  },
+  {
+   "default": "Today",
+   "fieldname": "posting_date",
+   "fieldtype": "Date",
+   "label": "Posting Date",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-04-10 08:44:45.782270",
+ "modified": "2026-04-21 22:06:33.238432",
  "modified_by": "Administrator",
  "module": "Rental Management",
  "name": "Leave Settlement",

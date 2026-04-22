@@ -1,9 +1,9 @@
 # Copyright (c) 2026, osama.ahmed@deliverydevs.com and contributors
 # For license information, please see license.txt
 
-# import frappe
+import frappe
 from frappe.model.document import Document
-
+from frappe.utils import getdate
 
 class LeaveSettlement(Document):
 	# begin: auto-generated types
@@ -21,7 +21,7 @@ class LeaveSettlement(Document):
 		adjustments_if_any: DF.Currency
 		amended_from: DF.Link | None
 		company: DF.Link
-		date_of_settlement: DF.Date | None
+		date_of_settlement: DF.Date
 		department: DF.Link | None
 		doj__re_joining_date: DF.Date | None
 		employee: DF.Link
@@ -35,6 +35,7 @@ class LeaveSettlement(Document):
 		outstanding_advance: DF.Currency
 		overtime_allowance: DF.Currency
 		position: DF.Link | None
+		posting_date: DF.Date | None
 		remark: DF.LongText | None
 		salary_due: DF.Table[SalaryDue]
 		ticket_allowance: DF.Table[TicketAllowance]
@@ -46,3 +47,63 @@ class LeaveSettlement(Document):
 		type_of_settlement: DF.Literal["", "Vacation Settlement", "Final Settlement", "Labour Court Settlement", "Internal Transfer Settlement"]
 	# end: auto-generated types
 	pass
+
+@frappe.whitelist()
+def get_ticket_allowance(employee, settlement_date):
+    """
+    Returns unpaid Ticket Allowance records for an employee where the
+    settlement date falls within the allowance cycle.
+    """
+
+    if not employee or not settlement_date:
+        return []
+
+    
+    settlement_date = getdate(settlement_date)
+
+    # Fetch ticket allowance records that match the settlement date
+    tickets = frappe.get_all(
+        "Ticket Allowance Detail",
+        filters={
+            "parent": employee,                
+            "parenttype": "Employee",
+            "paid": 0,
+            "manual_paid":0,                         
+            "from_date": ["<=", settlement_date],  
+            "to_date": [">=", settlement_date]     
+        },
+        fields=["from_date", "to_date", "amount"],
+        order_by="from_date asc"
+    )
+
+    result = []
+
+    # Format data to match the structure expected by the client script
+    for t in tickets:
+        result.append({
+            "from": t.from_date,
+            "to": t.to_date,
+            "amount": t.amount
+        })
+
+
+    return result
+
+def mark_ticket_paid(doc, method):
+    """
+    Mark related Ticket Allowance Detail records as paid
+    when Leave Settlement is submitted.
+    """
+
+    if not doc.ticket_allowance:
+        return
+
+    for row in doc.ticket_allowance:
+
+        frappe.db.sql("""
+            UPDATE `tabTicket Allowance Detail`
+            SET paid = 1, reference = %s
+            WHERE
+                parent = %s
+                AND from_date = %s
+        """, (doc.name, doc.employee, row.get("from")))

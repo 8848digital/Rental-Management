@@ -8,7 +8,6 @@
  "field_order": [
   "from",
   "to",
-  "days",
   "amount"
  ],
  "fields": [
@@ -16,32 +15,29 @@
    "fieldname": "from",
    "fieldtype": "Date",
    "in_list_view": 1,
-   "label": "From"
+   "label": "From",
+   "read_only": 1
   },
   {
    "fieldname": "to",
    "fieldtype": "Date",
    "in_list_view": 1,
-   "label": "To"
-  },
-  {
-   "fieldname": "days",
-   "fieldtype": "Float",
-   "in_list_view": 1,
-   "label": "Days"
+   "label": "To",
+   "read_only": 1
   },
   {
    "fieldname": "amount",
    "fieldtype": "Currency",
    "in_list_view": 1,
-   "label": "Amount"
+   "label": "Amount",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-04-09 21:33:46.787374",
+ "modified": "2026-04-19 11:50:18.328393",
  "modified_by": "Administrator",
  "module": "Rental Management",
  "name": "Ticket Allowance",
