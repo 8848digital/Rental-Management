@@ -98,7 +98,7 @@ frappe.ui.form.on('Employee', {
         }
     },
     refresh(frm) {
-
+        set_passport_details(frm);
         // fetch the setting once
         frappe.call({
             method: "rental_management.rental_management.doctype.employee.get_manual_paid_lock_date",
@@ -112,6 +112,19 @@ frappe.ui.form.on('Employee', {
 
 });
 
+function set_passport_details(frm) {
+    if (!frm.doc.custom_certificates) return;
+
+    let passport_row = frm.doc.custom_certificates.find(row =>
+        row.certification_name === "Passport no"
+    );
+    
+    if (passport_row) {
+        frm.set_value("passport_number", passport_row.reference_no);
+        frm.set_value("date_of_issue", passport_row.date_of_issue);
+        frm.set_value("valid_upto", passport_row.date_of_expiry);
+    }
+}
 
 // Calculate Probation End Date = Confirmation Date + Probation Period
 function calculate_probation(frm) {
