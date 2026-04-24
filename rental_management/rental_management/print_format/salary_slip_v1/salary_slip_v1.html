@@ -1,0 +1,260 @@
+<style>
+
+@media screen {
+    .print-format {
+        width: 9.4in;
+        padding: 0.15in;   
+        min-height: 11.7in;
+    }
+}
+
+.print-format p {
+    margin: 0;
+    line-height: 1.05;
+}
+
+.print-format td {
+    line-height: 1.05;
+}
+
+/* REMOVE BODY EXTRA SPACE */
+body {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* TABLE BASE */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    margin: 0 !important;
+}
+
+/* MAIN FIX */
+td, th {
+    border: 1px solid #000;       
+    padding: 2px 4px;             
+    line-height: 1.05;            
+    vertical-align: middle;
+}
+
+/* STYLES */
+.bold { font-weight: 600; }       
+.center { text-align: center; }
+.right { text-align: right; }
+
+.grey { background-color: #e6e6e6; } 
+
+.title { 
+    font-size: 12px;             
+    font-weight: 700;
+}
+
+</style>
+
+{% set logo = frappe.db.get_single_value("Orion Settings", "company_logo") %}
+
+<!-- ================= HEADER ================= -->
+<table style="border:2px solid #000; border-bottom:0;">
+<tr>
+
+    <!-- LOGO (no right border) -->
+    <td style="width:30%; border-right:0;">
+        {% if logo %}
+        <img src="{{ logo }}" style="height:55px;">
+        {% endif %}
+    </td>
+
+    <!-- TITLE (no left + no right border) -->
+    <td class="center bold title" style="width:40%; border-left:0; border-right:0;font-size:16px">
+        <b>SALARY SLIP</b>
+    </td>
+
+    <!-- REF (normal border) -->
+    <td style="width:30%;font-size:12px">
+        REF NO:<br>
+       {{doc.name}}
+    </td>
+
+</tr>
+</table>
+<!-- ================= DETAILS ================= -->
+<table style="border:2px solid #000; border-top:0; border-bottom:0;font-size:12px">
+
+<tr>
+    <td class="grey bold">Employee No</td>
+    <td>{{ doc.employee }}</td>
+    <td class="grey bold">Salary Transfer Date</td>
+    <td>{{ frappe.utils.formatdate(doc.posting_date, "dd-MM-yyyy") }}</td>
+</tr>
+
+<tr>
+    <td class="grey bold">Employee Name</td>
+    <td style="white-space: normal;">{{ doc.employee_name }}</td>
+    <td class="grey bold">Salary Profile</td>
+    <td>{{ doc.department }}</td>
+</tr>
+
+<tr>
+    <td class="grey bold">Designation</td>
+    <td>{{ doc.designation }}</td>
+    <td class="grey bold">Pay Month</td>
+    <td>{{ frappe.format_date(doc.start_date, "MMMM yyyy") }}</td>
+</tr>
+
+<tr>
+    <td class="grey bold">Department</td>
+    <td>{{ doc.department }}</td>
+    <td class="grey bold">Worked Days</td>
+    <td>{{ doc.payment_days }}</td>
+</tr>
+
+<tr>
+    <td class="grey bold">Worked For</td>
+    <td>{{ doc.company }}</td>
+    <td class="grey bold">Absent Days</td>
+    <td>{{ doc.absent_days }}</td>
+</tr>
+
+</table>
+<!-- ================= EARNINGS & DEDUCTIONS ================= -->
+<table style="border:2px solid #000; border-top:0;font-size:12px">
+
+<tr class="bold grey">
+    <td style="width:30%;">Salary Components</td>
+    <td class="center" style="width:15%;">Actual</td>
+    <td class="center" style="width:15%;">Earned</td>
+    <td style="width:25%;">Deduction</td>
+    <td class="center" style="width:15%;">Amount</td>
+</tr>
+
+{% set main_earnings = [] %}
+{% set other_earnings = [] %}
+{% set ns = namespace(main_total=0) %}
+
+{% for e in doc.earnings %}
+    {% if e.do_not_include_in_total == 1 %}
+        {% set _ = main_earnings.append(e) %}
+        {% set ns.main_total = ns.main_total + (e.amount or 0) %}
+    {% else %}
+        {% set _ = other_earnings.append(e) %}
+    {% endif %}
+{% endfor %}
+
+<!-- ================= MAIN EARNINGS ================= -->
+{% for i in range(max(main_earnings|length, doc.deductions|length)) %}
+<tr>
+    <td>
+        {{ main_earnings[i].salary_component if main_earnings|length > i else "" }}
+    </td>
+
+    <td class="right">
+        {% if main_earnings|length > i %}
+            {{ frappe.utils.fmt_money(main_earnings[i].amount, currency=doc.currency) }}
+        {% endif %}
+    </td>
+
+    <td class="right">
+        {% if main_earnings|length > i %}
+            {{ frappe.utils.fmt_money(main_earnings[i].amount, currency=doc.currency) }}
+        {% endif %}
+    </td>
+
+    <td>
+        {{ doc.deductions[i].salary_component if doc.deductions|length > i else "" }}
+    </td>
+
+    <td class="right">
+        {% if doc.deductions|length > i %}
+            {{ frappe.utils.fmt_money(doc.deductions[i].amount, currency=doc.currency) }}
+        {% endif %}
+    </td>
+</tr>
+{% endfor %}
+
+<!-- ================= TOTAL MONTHLY SALARY ================= -->
+<tr class="bold">
+    <td>TOTAL MONTHLY SALARY</td>
+    <td colspan="2" class="right">
+        {{ frappe.utils.fmt_money(ns.main_total, currency=doc.currency) }}
+    </td>
+    <td></td>
+    <td></td>
+</tr>
+
+<!-- ================= OTHER PAYMENTS ================= -->
+{% if other_earnings %}
+<tr>
+    <td class="bold" colspan="3">Other Payments</td>
+    
+    <td></td>
+    <td></td>
+</tr>
+
+{% for e in other_earnings %}
+{% if e.salary_component!="Total Salary" %}
+<tr>
+    <td style="padding-left:15px;">
+        {{ e.salary_component }}
+    </td>
+    <td></td>
+    <td class="right">
+        {{ frappe.utils.fmt_money(e.amount, currency=doc.currency) }}
+    </td>
+    <td></td>
+    <td></td>
+</tr>
+{% endif%}
+{% endfor %}
+{% endif %}
+
+
+<tr class="bold">
+    <td>Total Earnings</td>
+    <td colspan="2" class="right">{{ frappe.utils.fmt_money(doc.gross_pay, currency=doc.currency) }}</td>
+    <td>Total Deductions</td>
+    <td class="right">{{ frappe.utils.fmt_money(doc.total_deduction or doc.total_deductions, currency=doc.currency) }}</td>
+</tr>
+
+
+<!-- ================= NET SALARY + WORDS ================= -->
+<tr>
+    <td colspan="2" class="bold">
+        Net Salary payable :
+        {{ frappe.utils.fmt_money(doc.net_pay, currency=doc.currency) }}
+    </td>
+
+    <td colspan="3">
+        Amount in words :
+        {{ frappe.utils.money_in_words(doc.net_pay, doc.currency) }}
+    </td>
+</tr>
+
+<!-- ================= PAYMENT DETAILS ================= -->
+<tr class="bold grey center">
+    <td>Pay Method Name</td>
+    <td colspan="2">Bank Name</td>
+    <td colspan="2">Paid From account</td>
+</tr>
+
+<tr class="center">
+    <td>{{doc.mode_of_payment}}</td>
+    <td colspan="2">
+        {{ frappe.db.get_value("Employee", {"name": doc.employee}, "bank_name") or "" }}
+    </td>
+    <td colspan="2">
+        {{ doc.company }}
+    </td>
+</tr>
+
+<!-- ================= REMARKS ================= -->
+<tr>
+    <td colspan="5" style="height:80px; vertical-align:top;">
+        <b>Remarks :</b><br><br>
+
+        <div style="margin-top:40px;">
+            This is a system-generated statement and does not require any signature.
+        </div>
+    </td>
+</tr>

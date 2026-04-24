@@ -17,6 +17,7 @@ class OrionSettings(Document):
 
 		company_logo: DF.AttachImage | None
 		manual_paid_check_read_only_date: DF.Date | None
+		ss_print_logo: DF.AttachImage | None
 		ticket_entitlement_detail: DF.Table[TicketEntitlement]
 	# end: auto-generated types
 	pass

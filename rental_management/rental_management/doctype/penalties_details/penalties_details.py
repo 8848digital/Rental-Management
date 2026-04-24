@@ -1,11 +1,11 @@
-# Copyright (c) 2025, osama.ahmed@deliverydevs.com and contributors
+# Copyright (c) 2026, osama.ahmed@deliverydevs.com and contributors
 # For license information, please see license.txt
 
 # import frappe
 from frappe.model.document import Document
 
 
-class Employeecdt(Document):
+class PenaltiesDetails(Document):
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -14,15 +14,13 @@ class Employeecdt(Document):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		attachment: DF.Attach | None
-		attachment_1: DF.Attach | None
-		certification_name: DF.Link
-		date_of_expiry: DF.Date
-		date_of_issue: DF.Date
+		date_of_deduction_occurred: DF.Date | None
+		employee_deduction_reference: DF.Data | None
+		installation_amount: DF.Currency
 		parent: DF.Data
 		parentfield: DF.Data
 		parenttype: DF.Data
-		reference_no: DF.Data
-		status: DF.Literal["", "Active", "Expired"]
+		penalty_name: DF.Link | None
+		remaining_amount: DF.Currency
 	# end: auto-generated types
 	pass

@@ -1,0 +1,140 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "HR/ED/.YYYY./.####",
+ "creation": "2026-04-19 15:16:29.273764",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_4yar",
+  "amended_from",
+  "employee",
+  "employee_name",
+  "department",
+  "column_break_jmyd",
+  "transaction_date",
+  "status",
+  "total_deduction",
+  "paid_amount",
+  "remaining_balance",
+  "section_break_mrhq",
+  "employee_deduction_detail",
+  "remarks"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_4yar",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Employee Deduction",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "label": "Employee",
+   "options": "Employee"
+  },
+  {
+   "fetch_from": "employee.employee_name",
+   "fieldname": "employee_name",
+   "fieldtype": "Data",
+   "label": "Employee Name"
+  },
+  {
+   "fetch_from": "employee.custom_department_of_working_company",
+   "fieldname": "department",
+   "fieldtype": "Link",
+   "label": "Department ",
+   "options": "Department"
+  },
+  {
+   "fieldname": "column_break_jmyd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Today",
+   "fieldname": "transaction_date",
+   "fieldtype": "Date",
+   "label": "Transaction Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Text",
+   "label": "Remarks"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "\nDraft\nUnpaid\nPartial Paid\nPaid",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_deduction",
+   "fieldtype": "Currency",
+   "label": "Total deduction",
+   "read_only": 1
+  },
+  {
+   "fieldname": "paid_amount",
+   "fieldtype": "Currency",
+   "label": "Paid amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "remaining_balance",
+   "fieldtype": "Currency",
+   "label": "Remaining Balance",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_mrhq",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "employee_deduction_detail",
+   "fieldtype": "Table",
+   "label": "Employee Deduction Detail",
+   "options": "Employee Deduction Detail"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-04-23 21:43:53.150319",
+ "modified_by": "Administrator",
+ "module": "Rental Management",
+ "name": "Employee Deduction",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
