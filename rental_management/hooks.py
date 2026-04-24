@@ -44,7 +44,8 @@ app_license = "mit"
 
 # include js in doctype views
 doctype_js = {
-    "Employee" : "public/js/employee.js"
+    "Employee" : "public/js/employee.js",
+    "Additional Salary": "public/js/additional_salary.js"
     }
 # app_include_css = "/assets/rental_management/css/listview.css"
 doctype_list_js = {"Employee": "public/js/employee_list.js"}
@@ -165,6 +166,11 @@ fixtures = [
 # }
 
 doc_events = {
+    "Additional Salary":{
+        "validate":"rental_management.rental_management.doctype.additional_salary.validate",
+        "on_submit":"rental_management.rental_management.doctype.additional_salary.on_submit",
+        "on_cancel":"rental_management.rental_management.doctype.additional_salary.on_cancel"
+    },
     "Leave Settlement": {
         "on_submit": "rental_management.rental_management.doctype.leave_settlement.leave_settlement.mark_ticket_paid"
     },

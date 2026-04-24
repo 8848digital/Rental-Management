@@ -9,7 +9,9 @@
   "ticket_entitlement_detail",
   "manual_paid_check_read_only_date",
   "sales_invoice_tab",
-  "company_logo"
+  "company_logo",
+  "salary_slip_tab",
+  "ss_print_logo"
  ],
  "fields": [
   {
@@ -37,13 +39,23 @@
    "fieldname": "manual_paid_check_read_only_date",
    "fieldtype": "Date",
    "label": "Manual Paid Check Read Only Date"
+  },
+  {
+   "fieldname": "salary_slip_tab",
+   "fieldtype": "Tab Break",
+   "label": "Salary Slip"
+  },
+  {
+   "fieldname": "ss_print_logo",
+   "fieldtype": "Attach Image",
+   "label": "SS Print Logo"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-04-21 22:31:03.963015",
+ "modified": "2026-04-24 10:19:04.678604",
  "modified_by": "Administrator",
  "module": "Rental Management",
  "name": "Orion Settings",

@@ -5,7 +5,7 @@
 from frappe.model.document import Document
 
 
-class EmployeeDocument(Document):
+class EmployeeDocuments(Document):
 	# begin: auto-generated types
 	# This code is auto-generated. Do not modify anything in this block.
 
@@ -14,10 +14,6 @@ class EmployeeDocument(Document):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		document: DF.Attach | None
-		document_name: DF.Link | None
-		parent: DF.Data
-		parentfield: DF.Data
-		parenttype: DF.Data
+		name1: DF.Data | None
 	# end: auto-generated types
 	pass
