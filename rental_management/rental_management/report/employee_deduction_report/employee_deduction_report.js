@@ -17,7 +17,12 @@ frappe.query_reports["Employee Deduction Report"] = {
             "fieldtype": "Select",
             "options": "\nUnpaid\nPartial Paid\nPaid"
         },
-
+        {
+            "fieldname": "penalty_type",
+            "label": "Penalty Type",
+            "fieldtype": "Link",
+            "options": "Penalties"
+        },
         {
             "fieldname": "from_date",
             "label": "From Date",

@@ -34,7 +34,10 @@ def get_data(filters):
 
     conditions = ""
     values = {}
-
+    # Filter by penalty type
+    if filters.get("penalty_type"):
+        conditions += " AND edd.type_of_penalty = %(penalty_type)s"
+        values["penalty_type"] = filters.get("penalty_type")
     # Filter by employee
     if filters.get("employee"):
         conditions += " AND ed.employee = %(employee)s"
