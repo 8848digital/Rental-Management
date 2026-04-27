@@ -27,7 +27,7 @@ class EmployeeDeduction(Document):
 		total_deduction: DF.Currency
 		transaction_date: DF.Date | None
 	# end: auto-generated types
-	pass
+	
 
 	def on_cancel(self):
 			invalid_refs = []
