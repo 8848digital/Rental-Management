@@ -14,6 +14,9 @@ class EmployeeDeductionDetail(Document):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
+		attachment_1: DF.Attach | None
+		attachment_2: DF.Attach | None
+		attachment_3: DF.Attach | None
 		deduction_amount: DF.Currency
 		deduction_date: DF.Date
 		installment: DF.Int
