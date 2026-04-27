@@ -2,13 +2,14 @@ import frappe
 import json
 from frappe.utils import get_link_to_form
 
-def validate(self,method):
-    total = 0
+def validate(self, method):
+    if self.salary_component == "Total Deduction":
+        total = 0
 
-    for row in self.custom_penalties_detail:
-        total += row.installation_amount or 0
+        for row in self.custom_penalties_detail:
+            total += row.installation_amount or 0
 
-    self.amount = total
+        self.amount = total
 
 @frappe.whitelist()
 def get_deduction_by_payroll_date(employee, payroll_date):

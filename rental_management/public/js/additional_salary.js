@@ -1,6 +1,8 @@
 
 frappe.ui.form.on('Additional Salary', {
-
+    refresh: function(frm) {
+        trigger_fetch(frm);
+    },
     // Trigger on payroll date change
     payroll_date: function(frm) {
         trigger_fetch(frm);
@@ -67,7 +69,6 @@ function fetch_deduction(frm) {
 
             // Clear existing rows before adding new ones
             frm.clear_table("custom_penalties_detail");
-
             if (r.message && r.message.rows) {
 
                 r.message.rows.forEach(d => {
