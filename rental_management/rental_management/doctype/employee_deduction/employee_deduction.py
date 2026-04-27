@@ -3,7 +3,7 @@
 
 import frappe
 from frappe.model.document import Document
-
+import re
 
 class EmployeeDeduction(Document):
 	# begin: auto-generated types
@@ -27,15 +27,40 @@ class EmployeeDeduction(Document):
 		total_deduction: DF.Currency
 		transaction_date: DF.Date | None
 	# end: auto-generated types
-	pass
+	
 
+	def on_cancel(self):
+			invalid_refs = []
+
+			for row in self.employee_deduction_detail:
+				if row.reference:
+					refs = re.findall(r'>([^<]+)<', row.reference)
+
+					for ref in refs:
+						# Check if Additional Salary exists and is submitted
+						if frappe.db.get_value("Additional Salary", ref, "docstatus") == 1:
+							invalid_refs.append(ref)
+
+			if invalid_refs:
+				frappe.throw(
+					"Please cancel the following Additional Salary document(s) first:<br><b>"
+					+ "<br>".join(set(invalid_refs)) +
+					"</b>"
+				)
 	def validate(self):
 		self.update_child_payment()
 		# Always keep parent totals and child calculations in sync
 		self.update_totals()
+		self.db_update()
+		for row in self.employee_deduction_detail:
+			row.db_update()
+
 	def on_update_after_submit(self):
 		self.update_child_payment()
-		self.update_totals()
+		self.update_parent_totals()
+		self.db_update()
+		for row in self.employee_deduction_detail:
+			row.db_update()
 
 	def update_child_payment(self):
 
@@ -104,8 +129,6 @@ class EmployeeDeduction(Document):
 
 		for row in self.employee_deduction_detail:
 
-			# DO NOT recalculate here 
-			# Use already computed values from update_child_payment()
 
 			total += row.deduction_amount or 0
 			paid += row.paid_amount or 0
