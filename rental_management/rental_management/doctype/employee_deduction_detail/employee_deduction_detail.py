@@ -29,6 +29,7 @@ class EmployeeDeductionDetail(Document):
 		payroll_start_date: DF.Date
 		reference: DF.Text | None
 		remaining_amount: DF.Currency
+		remarks: DF.Text | None
 		status: DF.Literal["", "Unpaid", "Partial Paid", "Paid"]
 		type_of_penalty: DF.Link
 	# end: auto-generated types

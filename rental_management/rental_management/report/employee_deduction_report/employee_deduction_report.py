@@ -27,38 +27,46 @@ def get_columns():
         {"label": "Paid Amount", "fieldname": "paid_amount", "fieldtype": "Currency", "width": 120},
         {"label": "Remaining", "fieldname": "remaining_amount", "fieldtype": "Currency", "width": 120},
         {"label": "Status", "fieldname": "status", "fieldtype": "Data", "width": 120},
+        {"label": "Remarks", "fieldname": "remarks", "fieldtype": "Data", "width": 200},
+        {"label": "Payroll Date", "fieldname": "additional_salary_date", "fieldtype": "Data", "width": 180},
     ]
 
 
 def get_data(filters):
 
+    import re
+
     conditions = ""
     values = {}
-    # Filter by penalty type
-    if filters.get("penalty_type"):
-        conditions += " AND edd.type_of_penalty = %(penalty_type)s"
-        values["penalty_type"] = filters.get("penalty_type")
-    # Filter by employee
+
+    # ---------------- FILTERS ----------------
+
     if filters.get("employee"):
         conditions += " AND ed.employee = %(employee)s"
         values["employee"] = filters.get("employee")
 
-    # Filter by status
     if filters.get("status"):
         conditions += " AND edd.status = %(status)s"
         values["status"] = filters.get("status")
 
-    # Date overlap filter (IMPORTANT FIX)
-    if filters.get("from_date") and filters.get("to_date"):
-        conditions += """
-            AND edd.payroll_start_date <= %(to_date)s
-            AND edd.payrol_end_date >= %(from_date)s
-        """
-        values["from_date"] = filters.get("from_date")
-        values["to_date"] = filters.get("to_date")
+    if filters.get("penalty_type"):
+        conditions += " AND edd.type_of_penalty = %(penalty_type)s"
+        values["penalty_type"] = filters.get("penalty_type")
+
+    # Deduction Date >=
+    if filters.get("deduction_date"):
+        conditions += " AND edd.deduction_date >= %(deduction_date)s"
+        values["deduction_date"] = filters.get("deduction_date")
+
+    # Payroll Start Date >=
+    if filters.get("payroll_start_date"):
+        conditions += " AND edd.payroll_start_date >= %(payroll_start_date)s"
+        values["payroll_start_date"] = filters.get("payroll_start_date")
+
 
     data = frappe.db.sql(f"""
         SELECT
+            edd.name as edd_name,
             edd.parent,
             ed.employee,
             ed.employee_name,
@@ -69,14 +77,85 @@ def get_data(filters):
             edd.deduction_amount,
             edd.paid_amount,
             edd.remaining_amount,
-            edd.status
+            edd.status,
+            edd.remarks,
+            edd.reference
         FROM `tabEmployee Deduction Detail` edd
         INNER JOIN `tabEmployee Deduction` ed
             ON ed.name = edd.parent
-        WHERE 
-            ed.docstatus = 1
-            {conditions}
-        ORDER BY ed.employee, edd.deduction_date ASC
+        WHERE ed.docstatus = 1
+        {conditions}
+        ORDER BY ed.employee, edd.deduction_date
     """, values, as_dict=1)
 
-    return data
+    final_data = []
+
+
+    for row in data:
+
+        additional_rows = []
+
+        # ---- Extract Additional Salary IDs ----
+        if row.get("reference"):
+            salary_list = re.findall(r'>(HR-ADS-[^<]+)<', row.get("reference"))
+
+            for sal in salary_list:
+
+                try:
+                    sal_doc = frappe.get_doc("Additional Salary", sal)
+                except:
+                    continue
+
+                # Salary Date Filter
+                from frappe.utils import getdate
+
+                if filters.get("salary_date"):
+                    filter_date = getdate(filters.get("salary_date"))
+
+                    if sal_doc.payroll_date < filter_date:
+                        continue
+                # ---- Match child rows ----
+                for child in sal_doc.custom_penalties_detail:
+
+                    if child.employee_deduction_reference == row["edd_name"]:
+
+                        additional_rows.append({
+                            "payroll_date": sal_doc.payroll_date,
+                            "amount": child.installation_amount
+                        })
+
+        if not additional_rows:
+            main_row = row.copy()
+            main_row["additional_salary_date"] = None
+            final_data.append(main_row)
+            continue
+
+        first = additional_rows[0]
+
+        main_row = row.copy()
+        main_row["additional_salary_date"] = first["payroll_date"]
+        main_row["paid_amount"] = first["amount"]
+
+        final_data.append(main_row)
+
+        for extra in additional_rows[1:]:
+
+            child_row = {
+                "parent": "",
+                "employee": "",
+                "employee_name": "",
+                "type_of_penalty": "",
+                "deduction_date": "",
+                "payroll_start_date": "",
+                "payrol_end_date": "",
+                "deduction_amount": "",
+                "paid_amount": extra["amount"],
+                "remaining_amount": "",
+                "status": "",
+                "remarks": "",
+                "additional_salary_date": extra["payroll_date"]
+            }
+
+            final_data.append(child_row)
+
+    return final_data

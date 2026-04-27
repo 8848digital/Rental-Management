@@ -79,7 +79,7 @@ function fetch_deduction(frm) {
                     row.employee_deduction_reference = d.name;
                     row.remaining_amount = d.remaining_amount;
                     row.date_of_deduction_occurred = d.deduction_date;
-
+                    row.remarks=d.remarks
                     // Ensure installment does not exceed remaining
                     if (d.installment_amount > d.remaining_amount) {
                         row.installation_amount = d.remaining_amount;

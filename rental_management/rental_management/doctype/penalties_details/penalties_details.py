@@ -22,5 +22,6 @@ class PenaltiesDetails(Document):
 		parenttype: DF.Data
 		penalty_name: DF.Link | None
 		remaining_amount: DF.Currency
+		remarks: DF.Text | None
 	# end: auto-generated types
 	pass

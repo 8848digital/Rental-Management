@@ -20,7 +20,8 @@
   "partial_paid_amount",
   "remaining_amount",
   "status",
-  "reference"
+  "reference",
+  "remarks"
  ],
  "fields": [
   {
@@ -124,13 +125,18 @@
    "fieldtype": "Currency",
    "label": "Partial Paid Amount",
    "mandatory_depends_on": "eval:doc.partial_paid"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Text",
+   "label": "Remarks "
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-04-23 23:01:19.975037",
+ "modified": "2026-04-26 22:11:02.434173",
  "modified_by": "Administrator",
  "module": "Rental Management",
  "name": "Employee Deduction Detail",

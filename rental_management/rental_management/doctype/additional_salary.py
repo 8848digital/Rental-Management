@@ -19,7 +19,8 @@ def get_deduction_by_payroll_date(employee, payroll_date):
             type_of_penalty,
             remaining_amount,
             deduction_date,
-            installment_amount
+            installment_amount,
+            remarks
         FROM `tabEmployee Deduction Detail`
         WHERE 
             parent IN (
@@ -46,7 +47,8 @@ def get_deduction_by_date_range(employee, from_date, to_date):
             type_of_penalty,
             remaining_amount,
             deduction_date,
-            installment_amount
+            installment_amount,
+            remarks
         FROM `tabEmployee Deduction Detail`
         WHERE 
             parent IN (
