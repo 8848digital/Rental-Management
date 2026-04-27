@@ -24,15 +24,19 @@ frappe.query_reports["Employee Deduction Report"] = {
             "options": "Penalties"
         },
         {
-            "fieldname": "from_date",
-            "label": "From Date",
-            "fieldtype": "Date"
-        },
-
-        {
-            "fieldname": "to_date",
-            "label": "To Date",
-            "fieldtype": "Date"
-        }
+    fieldname: "deduction_date",
+    label: "Deduction Date >=",
+    fieldtype: "Date"
+},
+{
+    fieldname: "payroll_start_date",
+    label: "Payroll Start >=",
+    fieldtype: "Date"
+},
+{
+    fieldname: "salary_date",
+    label: "Salary Payroll Date >=",
+    fieldtype: "Date"
+}
     ]
 };

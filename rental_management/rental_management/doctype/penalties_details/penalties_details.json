@@ -10,7 +10,8 @@
   "installation_amount",
   "employee_deduction_reference",
   "date_of_deduction_occurred",
-  "remaining_amount"
+  "remaining_amount",
+  "remarks"
  ],
  "fields": [
   {
@@ -44,13 +45,19 @@
    "fieldtype": "Currency",
    "label": "Remaining Amount",
    "read_only": 1
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Text",
+   "label": "Remarks",
+   "read_only": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2026-04-24 13:39:38.914481",
+ "modified": "2026-04-26 22:15:37.163985",
  "modified_by": "Administrator",
  "module": "Rental Management",
  "name": "Penalties Details",
