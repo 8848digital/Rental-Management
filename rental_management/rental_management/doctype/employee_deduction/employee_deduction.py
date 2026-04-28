@@ -20,6 +20,7 @@ class EmployeeDeduction(Document):
 		employee: DF.Link | None
 		employee_deduction_detail: DF.Table[EmployeeDeductionDetail]
 		employee_name: DF.Data | None
+		naming_series: DF.Literal[None]
 		paid_amount: DF.Currency
 		remaining_balance: DF.Currency
 		remarks: DF.Text | None
