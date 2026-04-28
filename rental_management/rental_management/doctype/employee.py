@@ -104,9 +104,6 @@ def get_manual_paid_lock_date():
     )
 
 
-import frappe
-from frappe.utils import getdate
-
 def create_salary_structure_assignment(doc, method):
 
     if not doc.custom_salary_structure or not doc.date_of_joining:
