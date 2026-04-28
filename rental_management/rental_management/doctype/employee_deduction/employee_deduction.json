@@ -2,7 +2,7 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "HR/ED/.YYYY./.####",
- "creation": "2026-04-19 15:16:29.273764",
+ "creation": "2026-04-28 16:55:50.884468",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
@@ -67,11 +67,6 @@
    "read_only": 1
   },
   {
-   "fieldname": "remarks",
-   "fieldtype": "Text",
-   "label": "Remarks"
-  },
-  {
    "fieldname": "status",
    "fieldtype": "Select",
    "label": "Status",
@@ -105,13 +100,18 @@
    "fieldtype": "Table",
    "label": "Employee Deduction Detail",
    "options": "Employee Deduction Detail"
+  },
+  {
+   "fieldname": "remarks",
+   "fieldtype": "Text",
+   "label": "Remarks"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2026-04-23 21:43:53.150319",
+ "modified": "2026-04-28 17:51:30.724224",
  "modified_by": "Administrator",
  "module": "Rental Management",
  "name": "Employee Deduction",
