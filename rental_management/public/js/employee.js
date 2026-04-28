@@ -86,7 +86,13 @@ frappe.ui.form.on('Employee', {
     },
 
     onload: function(frm) {
-        
+        frm.set_query('custom_salary_structure', function() {
+            return {
+                filters: {
+                    docstatus: 1  
+                }
+            };
+        });
         if (frm.doc.custom_employee_category === "Non-Office") {
             frm.set_value("final_confirmation_date", frm.doc.scheduled_confirmation_date);
         }
@@ -108,9 +114,19 @@ frappe.ui.form.on('Employee', {
         });
 
         sort_ticket_allowance(frm);
+        toggle_salary_structure_readonly(frm);
+    },
+    custom_salary_structure: function(frm) {
+        toggle_salary_structure_readonly(frm);
     }
-
 });
+
+function toggle_salary_structure_readonly(frm) {
+
+    if (frm.doc.custom_salary_structure && !frm.is_new()) {
+        frm.set_df_property('custom_salary_structure', 'read_only', 1);
+    }
+}
 
 function set_passport_details(frm) {
     if (!frm.doc.custom_certificates) return;

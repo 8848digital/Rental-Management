@@ -184,7 +184,9 @@ doc_events = {
         "validate": "rental_management.rental_management.validations.customer_hooks.validate_customer"
     },
     "Employee": {
-        "validate": "rental_management.rental_management.validations.employee_hooks.validate_employee"
+        "validate": "rental_management.rental_management.validations.employee_hooks.validate_employee",
+        "after_insert": "rental_management.rental_management.doctype.employee.create_salary_structure_assignment",
+        "on_update": "rental_management.rental_management.doctype.employee.create_salary_structure_assignment"
     },
     "Asset": {
         "autoname": "rental_management.rental_management.scripts.autoname_assets.autoname_asset"

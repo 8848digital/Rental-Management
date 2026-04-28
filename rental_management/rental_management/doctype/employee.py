@@ -102,3 +102,34 @@ def get_manual_paid_lock_date():
         "Orion Settings",
         "manual_paid_check_read_only_date"
     )
+
+
+import frappe
+from frappe.utils import getdate
+
+def create_salary_structure_assignment(doc, method):
+
+    if not doc.custom_salary_structure or not doc.date_of_joining:
+        return
+
+    # Check if SSA already exists for this employee & DOJ
+    exists = frappe.db.exists("Salary Structure Assignment", {
+        "employee": doc.name,
+        "from_date": getdate(doc.date_of_joining),
+        "docstatus": ["!=", 2]  
+    })
+
+    if exists:
+        return  
+
+    # Create SSA
+    ssa = frappe.new_doc("Salary Structure Assignment")
+    ssa.employee = doc.name
+    ssa.salary_structure = doc.custom_salary_structure
+    ssa.from_date = doc.date_of_joining
+    ssa.base = doc.custom_total_salary_as_per_offer_letter or 0
+
+    ssa.company = doc.company
+
+    ssa.insert(ignore_permissions=True)
+    ssa.submit()
