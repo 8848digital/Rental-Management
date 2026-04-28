@@ -27,8 +27,7 @@ class EmployeeDeduction(Document):
 		total_deduction: DF.Currency
 		transaction_date: DF.Date | None
 	# end: auto-generated types
-	
-
+	pass
 	def on_cancel(self):
 			invalid_refs = []
 
@@ -51,10 +50,7 @@ class EmployeeDeduction(Document):
 		self.update_child_payment()
 		# Always keep parent totals and child calculations in sync
 		self.update_totals()
-		self.db_update()
-		for row in self.employee_deduction_detail:
-			row.db_update()
-
+		
 	def on_update_after_submit(self):
 		self.update_child_payment()
 		self.update_parent_totals()
