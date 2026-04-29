@@ -32,6 +32,9 @@ def certificate_expiry_notification():
 
             for cert in emp_doc.custom_certificates:
 
+                # Match certificate name with config
+                if cert.certification_name != config.certification_name:
+                    continue
                 expiry_date = cert.get(config.field_notification_based_on)
 
                 if not expiry_date:
