@@ -118,6 +118,18 @@ frappe.ui.form.on('Employee', {
     },
     custom_salary_structure: function(frm) {
         toggle_salary_structure_readonly(frm);
+    },
+    salary_mode: function(frm) {
+        if (frm.doc.salary_mode === "C3 Pay") {
+
+            frappe.db.get_single_value('Orion Settings', 'default_bank_name_for_c3_pay')
+                .then(value => {
+                    if (value) {
+                        frm.set_value('bank_name', value);
+                    }
+                });
+
+        }
     }
 });
 

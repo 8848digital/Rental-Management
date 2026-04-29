@@ -11,7 +11,9 @@
   "sales_invoice_tab",
   "company_logo",
   "salary_slip_tab",
-  "ss_print_logo"
+  "ss_print_logo",
+  "employee_tab",
+  "default_bank_name_for_c3_pay"
  ],
  "fields": [
   {
@@ -49,13 +51,23 @@
    "fieldname": "ss_print_logo",
    "fieldtype": "Attach Image",
    "label": "SS Print Logo"
+  },
+  {
+   "fieldname": "employee_tab",
+   "fieldtype": "Tab Break",
+   "label": "Employee"
+  },
+  {
+   "fieldname": "default_bank_name_for_c3_pay",
+   "fieldtype": "Data",
+   "label": "Default Bank Name for C3 Pay"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2026-04-24 10:19:04.678604",
+ "modified": "2026-04-29 12:20:56.263600",
  "modified_by": "Administrator",
  "module": "Rental Management",
  "name": "Orion Settings",

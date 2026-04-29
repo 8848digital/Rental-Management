@@ -3,7 +3,8 @@ from frappe import _
 
 
 # Normalized lookup to keep user-friendly display names in messages
-REQUIRED_CERTS_DISPLAY = ["Passport no", "Emirates ID", "Residence Permit", "Work Permit"]
+# REQUIRED_CERTS_DISPLAY = ["Passport no", "Emirates ID", "Residence Permit", "Work Permit"]
+REQUIRED_CERTS_DISPLAY = ["Passport no"]
 REQUIRED_CERTS_MAP = {c.strip().lower(): c for c in REQUIRED_CERTS_DISPLAY}
 REQUIRED_CERTS_NORMALIZED = set(REQUIRED_CERTS_MAP.keys())
 
