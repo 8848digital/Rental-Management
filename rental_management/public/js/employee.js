@@ -121,6 +121,8 @@ frappe.ui.form.on('Employee', {
     },
 
     date_of_joining: function(frm) {
+        set_confirmation_date(frm);
+        calculate_probation(frm);
         toggle_salary_structure(frm);
     },
     salary_mode: function(frm) {
@@ -184,14 +186,19 @@ function set_passport_details(frm) {
         frm.set_value("valid_upto", passport_row.date_of_expiry);
     }
 }
+function set_confirmation_date(frm) {
+    if (frm.doc.date_of_joining) {
+        frm.set_value("final_confirmation_date", frm.doc.date_of_joining);
+    }
+}
 
 // Calculate Probation End Date = Confirmation Date + Probation Period
 function calculate_probation(frm) {
 
-    if (frm.doc.final_confirmation_date && frm.doc.custom_probation_period) {
+    if (frm.doc.date_of_joining && frm.doc.custom_probation_period) {
 
         let end_date = frappe.datetime.add_months(
-            frm.doc.final_confirmation_date,
+            frm.doc.date_of_joining,
             frm.doc.custom_probation_period
         );
 
