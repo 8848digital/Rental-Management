@@ -103,7 +103,7 @@ frappe.ui.form.on('Employee', {
             frm.set_value("final_confirmation_date", frm.doc.scheduled_confirmation_date);
         }
     },
-    refresh(frm) {
+    refresh: function(frm) {
         set_passport_details(frm);
         // fetch the setting once
         frappe.call({
@@ -114,13 +114,58 @@ frappe.ui.form.on('Employee', {
         });
 
         sort_ticket_allowance(frm);
-        toggle_salary_structure_readonly(frm);
+        toggle_salary_structure(frm);
     },
     custom_salary_structure: function(frm) {
-        toggle_salary_structure_readonly(frm);
+        toggle_salary_structure(frm);
+    },
+
+    date_of_joining: function(frm) {
+        set_confirmation_date(frm);
+        calculate_probation(frm);
+        toggle_salary_structure(frm);
+    },
+    salary_mode: function(frm) {
+        if (frm.doc.salary_mode === "C3 Pay") {
+
+            frappe.db.get_single_value('Orion Settings', 'default_bank_name_for_c3_pay')
+                .then(value => {
+                    if (value) {
+                        frm.set_value('bank_name', value);
+                    }
+                });
+
+        }
     }
 });
 
+function toggle_salary_structure(frm) {
+
+    if (!frm.doc.employee || !frm.doc.date_of_joining) return;
+
+    frappe.call({
+        method: "frappe.client.get_list",
+        args: {
+            doctype: "Salary Structure Assignment",
+            filters: {
+                employee: frm.doc.name,
+                from_date: frm.doc.date_of_joining,
+                docstatus: ["!=", 2]
+            },
+            limit_page_length: 1
+        },
+        callback: function(r) {
+
+            if (r.message && r.message.length > 0) {
+                // A exists → lock field
+                frm.set_df_property('custom_salary_structure', 'read_only', 1);
+            } else {
+                // SA NOT exists → allow edit
+                frm.set_df_property('custom_salary_structure', 'read_only', 0);
+            }
+        }
+    });
+}
 function toggle_salary_structure_readonly(frm) {
 
     if (frm.doc.custom_salary_structure && !frm.is_new()) {
@@ -141,14 +186,19 @@ function set_passport_details(frm) {
         frm.set_value("valid_upto", passport_row.date_of_expiry);
     }
 }
+function set_confirmation_date(frm) {
+    if (frm.doc.date_of_joining) {
+        frm.set_value("final_confirmation_date", frm.doc.date_of_joining);
+    }
+}
 
 // Calculate Probation End Date = Confirmation Date + Probation Period
 function calculate_probation(frm) {
 
-    if (frm.doc.final_confirmation_date && frm.doc.custom_probation_period) {
+    if (frm.doc.date_of_joining && frm.doc.custom_probation_period) {
 
         let end_date = frappe.datetime.add_months(
-            frm.doc.final_confirmation_date,
+            frm.doc.date_of_joining,
             frm.doc.custom_probation_period
         );
 

@@ -16,6 +16,7 @@ class Employeecdt(Document):
 
 		attachment: DF.Attach | None
 		attachment_1: DF.Attach | None
+		attachment_2: DF.Attach | None
 		certification_name: DF.Link
 		date_of_expiry: DF.Date
 		date_of_issue: DF.Date
