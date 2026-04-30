@@ -2,7 +2,35 @@ import frappe
 import json
 from frappe.utils import get_link_to_form
 
+def validate_child(self):
+    for row in self.custom_penalties_detail:
+
+        if not row.employee_deduction_reference:
+            continue
+
+        # Fetch REAL remaining from Employee Deduction Detail
+        remaining = frappe.db.get_value(
+            "Employee Deduction Detail",
+            row.employee_deduction_reference,
+            "remaining_amount"
+        )
+
+        if remaining is None:
+            frappe.throw(
+                f"Invalid reference in row #{row.idx}: {row.employee_deduction_reference}"
+            )
+
+        #  VALIDATION
+        if row.installation_amount > remaining:
+            frappe.throw(
+                f"""Row #{row.idx}:
+                Installation Amount ({row.installation_amount})
+                cannot be greater than Remaining Amount ({remaining})
+                """
+            )
+
 def validate(self, method):
+    validate_child(self)
     if self.salary_component == "Total Deduction":
         total = 0
 

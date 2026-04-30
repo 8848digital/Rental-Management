@@ -1,8 +1,8 @@
 
 frappe.ui.form.on('Additional Salary', {
-    refresh: function(frm) {
-        trigger_fetch(frm);
-    },
+    // refresh: function(frm) {
+    //     trigger_fetch(frm);
+    // },
     // Trigger on payroll date change
     payroll_date: function(frm) {
         trigger_fetch(frm);
