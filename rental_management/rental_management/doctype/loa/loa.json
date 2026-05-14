@@ -1,41 +1,39 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "field:contract_number",
+ "autoname": "field:loa_number",
  "creation": "2025-05-21 21:00:33.830061",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "contract_number",
+  "loa_number",
   "issuing_authority",
+  "client",
   "end_user",
   "ref_no",
-  "loa_status",
   "contract_year",
   "column_break_dhsn",
+  "document",
   "issue_date",
   "expiry_date",
-  "document",
+  "loa_status",
   "active",
-  "column_break_gbjp",
-  "license_issue_date",
-  "license_expiry_date",
   "mother_attachment",
+  "license_expiry_date",
+  "license_issue_date",
   "section_break_ahil",
   "total_vehicle_quota",
   "total_driver_quota",
-  "column_break_twtj",
-  "total_created_vehicle_cicpa",
-  "total_created_driver_cicpa",
-  "column_break_uxdw",
-  "total_cancelled_vehicle_cicpa",
-  "total_cancelled_driver_cicpa",
-  "column_break_wbgl",
   "allocated_vehicle_quota",
   "allocated_driver_quota",
-  "column_break_vvmc",
+  "total_created_driver_cicpa",
+  "column_break_twtj",
   "remaining_vehicle_quota",
+  "total_cancelled_vehicle_cicpa",
+  "total_created_vehicle_cicpa",
   "remaining_driver_quota",
+  "total_cancelled_driver_cicpa",
   "section_break_gddt",
   "locations",
   "section_break_qwnm",
@@ -67,9 +65,9 @@
   {
    "fieldname": "end_user",
    "fieldtype": "Link",
+   "hidden": 1,
    "label": "Contract Auth",
-   "options": "Contract Authority",
-   "reqd": 1
+   "options": "Contract Authority"
   },
   {
    "fieldname": "column_break_dhsn",
@@ -78,24 +76,25 @@
   {
    "fieldname": "issue_date",
    "fieldtype": "Date",
-   "label": "Valid From",
+   "label": "Issue Date",
    "reqd": 1
   },
   {
    "fieldname": "expiry_date",
    "fieldtype": "Date",
-   "label": "Valid To",
+   "label": "Expiry Date",
    "reqd": 1
   },
   {
    "fieldname": "section_break_ahil",
-   "fieldtype": "Section Break"
+   "fieldtype": "Section Break",
+   "label": "QUOTA DETAILS"
   },
   {
    "default": "0",
    "fieldname": "total_vehicle_quota",
    "fieldtype": "Int",
-   "label": "Total Vehicle Quota",
+   "label": "Total Quota Vehicle",
    "non_negative": 1,
    "reqd": 1
   },
@@ -103,33 +102,27 @@
    "default": "0",
    "fieldname": "total_driver_quota",
    "fieldtype": "Int",
-   "label": "Total Driver Quota",
+   "label": "Total Quota Personnel",
    "non_negative": 1,
    "reqd": 1
-  },
-  {
-   "fieldname": "column_break_wbgl",
-   "fieldtype": "Column Break"
   },
   {
    "allow_on_submit": 1,
    "default": "0",
    "fieldname": "allocated_vehicle_quota",
    "fieldtype": "Int",
+   "hidden": 1,
    "label": "Allocated Vehicle Quota",
    "non_negative": 1,
    "read_only": 1,
    "reqd": 1
   },
   {
-   "fieldname": "column_break_vvmc",
-   "fieldtype": "Column Break"
-  },
-  {
    "allow_on_submit": 1,
    "default": "0",
    "fieldname": "allocated_driver_quota",
    "fieldtype": "Int",
+   "hidden": 1,
    "label": "Allocated Driver Quota",
    "non_negative": 1,
    "read_only": 1,
@@ -139,7 +132,7 @@
    "allow_on_submit": 1,
    "fieldname": "remaining_vehicle_quota",
    "fieldtype": "Int",
-   "label": "Remaining Vehicle Quota",
+   "label": "Remaining Quota Vehicle",
    "non_negative": 1,
    "read_only": 1
   },
@@ -147,7 +140,7 @@
    "allow_on_submit": 1,
    "fieldname": "remaining_driver_quota",
    "fieldtype": "Int",
-   "label": "Remaining Driver Quota",
+   "label": "Remaining Quota Personnel",
    "non_negative": 1,
    "read_only": 1
   },
@@ -172,25 +165,22 @@
   {
    "fieldname": "ref_no",
    "fieldtype": "Data",
-   "label": "Ref No",
-   "reqd": 1
+   "hidden": 1,
+   "label": "Ref No"
   },
   {
    "fieldname": "contract_number",
    "fieldtype": "Data",
+   "hidden": 1,
    "label": "Contract Number",
-   "reqd": 1,
    "unique": 1
   },
   {
    "allow_on_submit": 1,
    "fieldname": "mother_attachment",
    "fieldtype": "Attach",
+   "hidden": 1,
    "label": "Mother Attachment"
-  },
-  {
-   "fieldname": "column_break_gbjp",
-   "fieldtype": "Column Break"
   },
   {
    "fieldname": "license_issue_date",
@@ -217,7 +207,7 @@
    "fieldname": "loa_status",
    "fieldtype": "Select",
    "label": "LOA Status",
-   "options": "\nActive\nExpired",
+   "options": "\nActive\nExpired\nCancelled",
    "read_only": 1
   },
   {
@@ -229,6 +219,7 @@
    "default": "0",
    "fieldname": "total_created_vehicle_cicpa",
    "fieldtype": "Int",
+   "hidden": 1,
    "label": "Total Created Vehicle CICPA",
    "read_only": 1
   },
@@ -237,24 +228,23 @@
    "default": "0",
    "fieldname": "total_created_driver_cicpa",
    "fieldtype": "Int",
+   "hidden": 1,
    "label": "Total Created Driver CICPA",
    "read_only": 1
   },
   {
    "fieldname": "contract_year",
    "fieldtype": "Int",
+   "hidden": 1,
    "label": "Contract Year",
    "non_negative": 1
-  },
-  {
-   "fieldname": "column_break_uxdw",
-   "fieldtype": "Column Break"
   },
   {
    "allow_on_submit": 1,
    "default": "0",
    "fieldname": "total_cancelled_vehicle_cicpa",
    "fieldtype": "Int",
+   "hidden": 1,
    "label": "Cancelled Vehicle CICPA",
    "read_only": 1
   },
@@ -263,8 +253,23 @@
    "default": "0",
    "fieldname": "total_cancelled_driver_cicpa",
    "fieldtype": "Int",
+   "hidden": 1,
    "label": "Cancelled Driver CICPA",
    "read_only": 1
+  },
+  {
+   "fieldname": "client",
+   "fieldtype": "Link",
+   "label": "Client",
+   "options": "LOA Client",
+   "reqd": 1
+  },
+  {
+   "fieldname": "loa_number",
+   "fieldtype": "Data",
+   "label": "LOA Number",
+   "reqd": 1,
+   "unique": 1
   }
  ],
  "index_web_pages_for_search": 1,
@@ -275,7 +280,7 @@
    "link_fieldname": "loa"
   }
  ],
- "modified": "2025-06-03 15:14:16.111573",
+ "modified": "2026-05-13 15:17:12.642372",
  "modified_by": "Administrator",
  "module": "Rental Management",
  "name": "LOA",
@@ -296,6 +301,7 @@
    "write": 1
   }
  ],
+ "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": []
